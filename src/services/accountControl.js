@@ -1,7 +1,4 @@
 module.exports = function(app, passport) {
-
-  const authenticate = require('../services/authenticate')
-
   app.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, user, info) => {
       if (err) return next(err)

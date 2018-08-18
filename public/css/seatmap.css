@@ -1,0 +1,11 @@
+.seat.me label {
+  background: purple;
+}
+
+.seat.free label {
+  background: green;
+}
+
+.seat.option label {
+  background: orange;
+}

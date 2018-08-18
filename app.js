@@ -13,6 +13,9 @@ const ErrorResponse = require('./src/services/ErrorResponse')
 const passportStrategy = require('./src/services/passportStrategy')
 const authenticate = require('./src/services/authenticate')
 
+// ---- Routers ----
+const apiRouter = require('./src/routes/api')
+
 // ---- Application ----
 const app = express()
 const server = http.createServer(app)
@@ -52,11 +55,14 @@ passport.use('login', passportStrategy.loginStrategy)
 // Delegation of account control services
 require('./src/services/accountControl')(app, passport)
 
+// API routing
+app.use('/api', authenticate.userIsLogin, apiRouter)
+
 app.use('/login', express.static(path.join(__dirname, 'public/login/login.html')))
 app.use(express.static(path.join(__dirname, 'public/login')))
 
 app.use('/index', authenticate.userIsLoginRedirect, express.static(path.join(__dirname, 'public/index.html')))
-app.use('/',      authenticate.userIsLoginRedirect, express.static(path.join(__dirname, 'public/')))
+app.use('/'     , authenticate.userIsLoginRedirect, express.static(path.join(__dirname, 'public/')))
 
 // ---- Socket connection ----
 require('./src/controllers/socketController')(io)

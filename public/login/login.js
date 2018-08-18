@@ -2,14 +2,14 @@ function login(bookingReference) {
   $.ajax({
     dataType: 'json',
     url: './login',
-    method: "POST",
+    method: 'POST',
     data: { 
       bookingReference: bookingReference
     },
     async: true,
     success: loginSuccess,
     error: loginError
-  });
+  })
 }
 
 function loginSuccess(data, status, jqXHR) {

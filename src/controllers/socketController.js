@@ -1,3 +1,6 @@
+const CXAdapter = require('../adapters/CXAdapter')
+const cxData = new CXAdapter()
+
 module.exports = function(io) {
   io.on('connection', socket => {
     console.log(`${socket.id} connected`)
@@ -7,9 +10,18 @@ module.exports = function(io) {
   
     socket.on('create', data => {
       const { flightCode, flightSeat } = data
+
+      // Join flight channel
       socket.join(flightCode)
+
+      // Join seat channel
       socket.join(`${flightCode}/${flightSeat}`)
-      socket.join(`${flightCode}/aisle`)
+
+      // Get plane data
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
+      const col = flightSeat.slice(-1)
+      if (col in seatMap.aisle) socket.join(`${flightCode}/aisle`)
+      else if (col in seatMap.window) socket.join(`${flightCode}/window`)
   
       console.log(`Creating data ${JSON.stringify(data)}`)
     })
@@ -18,7 +30,12 @@ module.exports = function(io) {
       const { flightCode, fromSeat, toSeat, message } = data
   
       // build message to other guy
-      io.emit(`${flightCode}/${toSeat}`, message)
+      console.log(`Emitting to channel ${flightCode}/${toSeat}`)
+      io.emit(`${flightCode}/${toSeat}`, data)
+    })
+
+    socket.on('cancel', data => {
+      // TODO propagate request cancelation to correct channels
     })
   })
 }

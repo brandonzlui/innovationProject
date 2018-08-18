@@ -3,10 +3,9 @@ const LocalStrategy = require('passport-local').Strategy
 
 // Dependencies
 const CXAdapter = require('../adapters/CXAdapter')
-const OLCI = require('../services/MockOLCI')
 
 // Data source setup
-const cxData = new CXAdapter(new OLCI())
+const cxData = new CXAdapter()
 
 // Strategy setup
 const strategyOptions = {

@@ -1,26 +1,36 @@
+const MOCK_CODE = 'CX888'
+
 class MockOLCI {
 
   constructor() {
-
-  }
-
-  retrieveBooking(bookingReference) {
-    const flightCode = 'CX888'
-    if (bookingReference.startsWith('1')) {
-      return {
-        flightCode: flightCode,
+    this.bookingData = {
+      '1QAZ': {
+        flightCode: MOCK_CODE,
         flightSeat: '10A'
-      }
-    }
-
-    if (bookingReference.startsWith('2')) {
-      return {
-        flightCode: flightCode,
+      },
+      '2WSX': {
+        flightCode: MOCK_CODE,
         flightSeat: '10C'
       }
     }
 
-    return null
+    this.seatMap = {}
+    this.seatMap[MOCK_CODE] = {
+      name: 'AirBus Mini',
+      rows: 10,
+      seatsPerRow: 6,
+      available: ['1A', '2C', '3D', '4F', '5F'],
+      aisle: ['C', 'D'],
+      window: ['A', 'F']
+    }
+  }
+
+  retrieveBooking(bookingReference) {
+    return this.bookingData[bookingReference]
+  }
+
+  retrieveSeatMap(flightCode) {
+    return this.seatMap[flightCode]
   }
 
 }

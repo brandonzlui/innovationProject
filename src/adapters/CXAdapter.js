@@ -1,9 +1,10 @@
 const ErrorResponse = require('../services/ErrorResponse')
+const OLCI = require('../services/MockOLCI')
 
 class CXAdapter {
 
-  constructor(cxDataSource) {
-    this.cxDataSource = cxDataSource
+  constructor() {
+    this.cxDataSource = new OLCI()
   }
 
   /**
@@ -20,6 +21,13 @@ class CXAdapter {
     }
 
     return [null, user]
+  }
+
+  getSeatMap(flightCode) {
+    const seatMap = this.cxDataSource.retrieveSeatMap(flightCode)
+    if (!seatMap) return [new ErrorResponse(`Seat map for ${flightCode} not found.`, 404), null]
+
+    return [null, seatMap]
   }
 
 }
