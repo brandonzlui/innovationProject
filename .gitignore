@@ -1,0 +1,8 @@
+# macOS temporary files
+*.DS_Store
+
+# vim temporary files
+*.swp
+
+# nodeJS
+node_modules/
