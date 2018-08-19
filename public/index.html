@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="seatCX">
 
 <head>
   <!-- Required meta tags -->
@@ -24,86 +24,88 @@
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="60">
-
-  <div id="nav"></div>
-
-  <!-- Small Bar -->
-  <div class="d-none d-lg-block bg-cxgreen font-white">
-    <div class="header-items">
-      <a class="home-link" href="./index">
-        <img class="brand-logo-large" src="assets/images/cx_logo_full.svg" alt="">
-      </a>
-      <div class="user-info logged-in-as" id="loginAs">
-        <!-- <a class="login-name" id="">Logged in as </a> -->
-        <a class="loginName font-Md" style="margin-right:5px"></a>
-        <div class="logout-icon d-inline-block" data-toggle="modal" data-target="#logoutModal">
-          <img src="assets/images/logout-icon.png" width="40" height="40" onmouseover="this.src='assets/images/logout-icon-hover.png';"
-            onmouseout="this.src='assets/images/logout-icon.png';" style="margin-bottom:5px;">
+  
+  <div ng-controller="NavController">
+    <!-- Small Bar -->
+    <div class="d-none d-lg-block bg-cxgreen font-white">
+      <div class="header-items">
+        <a class="home-link" href="./index">
+          <img class="brand-logo-large" src="assets/images/cx_logo_full.svg" alt="">
+        </a>
+        <div class="user-info logged-in-as" id="loginAs">
+          <!-- <a class="login-name" id="">Logged in as </a> -->
+          <a class="loginName font-Md" style="margin-right:5px"></a>
+          <div class="logout-icon d-inline-block" data-toggle="modal" data-target="#logoutModal">
+            <img src="assets/images/logout-icon.png" width="40" height="40" onmouseover="this.src='assets/images/logout-icon-hover.png';"
+              onmouseout="this.src='assets/images/logout-icon.png';" style="margin-bottom:5px;">
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg sticky sticky-top" id="mainNav">
-    <a class="menu-link navbar-toggler-left" data-toggle="collapse" data-target="#myNavbar">
-      <i aria-hidden="true" class="icon icon-menu d-lg-none" lang="en"></i>
-    </a>
-    <a class="home-link d-block d-lg-none m-auto" href="#">
-      <i aria-hidden="true" class="icon icon-swish" lang="en" style="padding-left:36px"></i>
-    </a>
-    <img class="user-info d-lg-none" src="assets/images/logout-icon.png" width="40" height="40" onmouseover="this.src='assets/images/logout-icon-hover.png';"
-      onmouseout="this.src='assets/images/logout-icon.png';" data-toggle="modal" data-target="#logoutModal">
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="navbar-nav nav text-md-center justify-content-md-around">
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="./portal/index">
-            <span class="link-text">Seat</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" href="#countdown">
-            <span class="link-text">Updates</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" href="#empathy-day-section">
-            <span class="link-text">Seat Map</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" href="#prepare">
-            <span class="link-text">Postings</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" href="#update">
-            <span class="link-text">My Requests</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-          <a class="nav-link" href="#schedule">
-            <span class="link-text">Contact</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky sticky-top" id="mainNav">
+      <a class="menu-link navbar-toggler-left" data-toggle="collapse" data-target="#myNavbar">
+        <i aria-hidden="true" class="icon icon-menu d-lg-none" lang="en"></i>
+      </a>
+      <a class="home-link d-block d-lg-none m-auto" href="#">
+        <i aria-hidden="true" class="icon icon-swish" lang="en" style="padding-left:36px"></i>
+      </a>
+      <img class="user-info d-lg-none" src="assets/images/logout-icon.png" width="40" height="40" onmouseover="this.src='assets/images/logout-icon-hover.png';"
+        onmouseout="this.src='assets/images/logout-icon.png';" data-toggle="modal" data-target="#logoutModal">
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="navbar-nav nav text-md-center justify-content-md-around">
+          <li ng-repeat="section in sections" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a href="#" class="nav-link" ng-click="changeState(section.stateName)">
+              <span class="link-text">{{section.title}}</span>
+            </a>
+          </li>
 
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header" style="border: none; display: flex; padding: 0 20px; margin-top: 20px;">
-          <h5 class="modal-title" id="logoutModal">Logout</h5>
-          <button type="button" class="close rotate-45" data-dismiss="modal" aria-label="Close">
-            <i class="icon icon-expand"></i>
-          </button>
-          <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button> -->
-        </div>
-        <hr align="center" width="95%">
-        <div class="modal-body">Are you sure you want to logout?</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" id="logout">Confirm</button>
+
+          <!-- <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" href="#countdown">
+              <span class="link-text">Updates</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" href="#empathy-day-section">
+              <span class="link-text">Seat Map</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" href="#prepare">
+              <span class="link-text">Postings</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" href="#update">
+              <span class="link-text">My Requests</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <a class="nav-link" href="#schedule">
+              <span class="link-text">Contact</span>
+            </a>
+          </li> -->
+        </ul>
+      </div>
+    </nav>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="border: none; display: flex; padding: 0 20px; margin-top: 20px;">
+            <h5 class="modal-title" id="logoutModal">Logout</h5>
+            <button type="button" class="close rotate-45" data-dismiss="modal" aria-label="Close">
+              <i class="icon icon-expand"></i>
+            </button>
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button> -->
+          </div>
+          <hr align="center" width="95%">
+          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="logout">Confirm</button>
+          </div>
         </div>
       </div>
     </div>
@@ -118,7 +120,11 @@
     </div>
   </div>
 
-  <section id="seat-map" name="seat-map">
+  <div class="container">
+    <ui-view></ui-view>
+  </div>
+
+  <!-- <section id="seat-map" name="seat-map">
     <div class="plane">
       <div class="cockpit">
         <h1 id="flightCode"></h1>
@@ -133,7 +139,7 @@
 
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Logo footer -->
   <div class="container cathay-logo-footer">
@@ -173,9 +179,19 @@
   <!-- WebSocket -->
   <script src="./lib/js/socket.io.js"></script>
 
+  <!-- Angular -->
+  <script src="./node_modules/angular/angular.js"></script>
+  <script src="./node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+
+  <!-- Controllers -->
+  <script src="./js/lib/app.js"></script>
+  <script src="./js/lib/NavController.js"></script>
+  <script src="./js/lib/SeatMapController.js"></script>
+  <script src="./js/lib/PostingsController.js"></script>
+
   <!-- Custom JavaScript -->
   <script src="./js/websocket.js"></script>
-  <script src="./js/index.js"></script>
+  <!-- <script src="./js/index.js"></script> -->
   
 </body>
 

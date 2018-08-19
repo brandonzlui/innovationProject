@@ -1,5 +1,3 @@
-const letters = ['A', 'B', 'C', 'D', 'E', 'F']
-
 $(document).ready(() => {
   joinChannels()
 
@@ -13,6 +11,8 @@ $(document).ready(() => {
 })
 
 function seatMapSuccess(plane, status, jqXHR) {
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F']
+
   // Update cockpit
   document.getElementById('flightCode').innerHTML = localStorage.getItem('flightCode')
   document.getElementById('planeName').innerHTML = plane.name
