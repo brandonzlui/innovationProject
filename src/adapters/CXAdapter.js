@@ -9,13 +9,14 @@ class CXAdapter {
 
   /**
    * Retrieve booking from CX data source.
-   * @returns [error, { flightCode, flightSeat }] 
+   * @returns [error, { bookingReference, flightCode, flightSeat }] 
    */
   getBooking(bookingReference) {
     const record = this.cxDataSource.retrieveBooking(bookingReference)
     if (!record) return [new ErrorResponse(`Booking reference ${bookingReference} not found.`, 404), null]
 
     const user = {
+      bookingReference: bookingReference,
       flightCode: record.flightCode,
       flightSeat: record.flightSeat
     }

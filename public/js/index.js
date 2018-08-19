@@ -55,11 +55,12 @@ function seatClicked(event) {
   let flightCode = localStorage.getItem('flightCode')
   let flightSeat = localStorage.getItem('flightSeat')
 
-  socket.emit('request', {
+  socket.emit('single-request', {
     flightCode: flightCode,
     fromSeat: flightSeat,
     toSeat: event.target.parentNode.id,
-    message: 'Swap pls'
+    companions: [],
+    message: 'Please swap'
   })
 }
 

@@ -1,5 +1,7 @@
 const MOCK_CODE = 'CX888'
 
+const SeatMap = require('../models/SeatMap')
+
 class MockOLCI {
 
   constructor() {
@@ -14,15 +16,15 @@ class MockOLCI {
       }
     }
 
-    this.seatMap = {}
-    this.seatMap[MOCK_CODE] = {
-      name: 'AirBus Mini',
-      rows: 10,
-      seatsPerRow: 6,
-      available: ['1A', '2C', '3D', '4F', '5F'],
-      aisle: ['C', 'D'],
-      window: ['A', 'F']
-    }
+    this.seatMaps = {}
+    this.seatMaps[MOCK_CODE] = new SeatMap(
+      'AirBus Mini',                    // name
+      10,                               // rows
+      6,                                // seats per row
+      ['1A', '2C', '3D', '4F', '5F'],   // available
+      ['C', 'D'],                       // aisle
+      ['A', 'F']                        // window
+    )
   }
 
   retrieveBooking(bookingReference) {
@@ -30,7 +32,23 @@ class MockOLCI {
   }
 
   retrieveSeatMap(flightCode) {
-    return this.seatMap[flightCode]
+    return this.seatMaps[flightCode]
+  }
+
+  takeSeat(flightCode, flightSeat) {
+    const index = this.seatMaps[flightCode].available.indexOf(flightSeat)
+    if (index < 0) return false
+
+    this.seatMaps[flightCode].available.splice(index, 1)
+    return true
+  }
+
+  releaseSeat(flightCode, flightSeat) {
+    const index = this.seatMaps[flightCode].available.indexOf(flightSeat)
+    if (index >= 0) return false
+
+    this.seatMaps[flightCode].available.push(flightSeat)
+    return true
   }
 
 }

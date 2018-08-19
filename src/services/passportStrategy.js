@@ -1,11 +1,9 @@
 // Modules
 const LocalStrategy = require('passport-local').Strategy
 
-// Dependencies
-const CXAdapter = require('../adapters/CXAdapter')
-
 // Data source setup
-const cxData = new CXAdapter()
+const DataSource = require('../models/DataSource')
+const cxData = DataSource.getInstance()
 
 // Strategy setup
 const strategyOptions = {

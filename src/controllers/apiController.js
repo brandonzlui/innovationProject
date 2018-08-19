@@ -1,6 +1,4 @@
-const CXAdapter = require('../adapters/CXAdapter')
-
-const cxData = new CXAdapter()
+const cxData = require('../models/DataSource').getInstance()
 
 function getSeatMap(req, res, next) {
   const [err, seatMap] = cxData.getSeatMap(req.params.flightCode)

@@ -8,24 +8,17 @@ function joinChannels() {
   })
 }
 
-
-
 let flightCode = localStorage.getItem('flightCode')
 let flightSeat = localStorage.getItem('flightSeat')
 
-
-
-function testSocket(otherSeat, message) {
-  socket.emit('request', {
-    flightCode: flightCode, 
-    fromSeat: flightSeat,
-    toSeat: otherSeat,
-    message: message
-  })
-}
+socket.on(`${flightCode}/${flightSeat}-init`, data => {
+  console.log(data)
+})
 
 socket.on(`${flightCode}/${flightSeat}`, data => {
-  const { flightCode, fromSeat, toSeat, message } = data
-  console.log(`Received message from person at ${fromSeat}: ${message}`)
+  const { flightCode, fromSeat, toSeat, isSingle, message } = data
+
+  const type = isSingle ? 'one-to-one' : 'one-to-many'
+  console.log(`Received ${type} message from person at ${fromSeat}: ${message}`)
   document.getElementById(fromSeat).className = 'seat option'
 })
