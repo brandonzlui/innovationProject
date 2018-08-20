@@ -1,3 +1,7 @@
+$(document).ready(function(){
+  customInputLabelListener();
+});
+
 function login(bookingReference) {
   $.ajax({
     dataType: 'json',
@@ -32,3 +36,14 @@ $('#login').submit(event => {
 
   login($('#bookingReference').val())
 })
+
+function customInputLabelListener() {
+  $('#bookingReference').on("focus", function() {
+    $('#bookingReferenceLabel').addClass("custom-label-focus");
+  });
+  $(".form-group-custom input").on("focusout", function() {
+    if ($('#bookingReference').val() == "") {
+      $('#bookingReferenceLabel').removeClass("custom-label-focus");
+    }
+  });
+}

@@ -1,0 +1,339 @@
+@font-face {
+  	font-family: 'CathaySans';
+  	src: url('./fonts/CathaySans_Rg.ttf');
+}
+
+body {
+  	font-family: 'CathaySans';
+}
+
+html, body {
+	height: 100%;
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	body {
+  		background-image: url('./login-bg-mobile-1.jpg') ;
+		background-position: center;
+		background-repeat:  no-repeat;
+		background-attachment: fixed;
+		background-size:  cover;
+  	}
+
+  	.welcome-title {
+		font-size: 16px;
+	}
+
+	.portal-title {
+		font-size: 14px;
+	}
+
+	.login-title {
+		margin: 80px 0 30px;
+	}
+
+	.welcome-title {
+		margin: 25px 0;
+	}
+
+	.portal-title {
+		margin-top: 50px;
+		margin-bottom: 30px;
+  	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 425px) {
+	.form-group {
+		font-size: 16px;
+	  	margin: 0 4rem;
+	}
+
+	.login-btn {
+		margin: 0 4rem;
+	}
+
+	 .footnote-container {
+		position: absolute;
+		width: 100%;
+		margin-top: 50px;
+	}
+
+	.footnote-0 {
+		width: 90%;
+		margin-left: 5%;
+	}
+
+
+	.ieAlertCard-card-content {
+		font-size: 12px;
+	}
+
+}
+
+@media screen and (min-width: 426px) and (max-width: 620px) {
+	.form-group {
+	  	font-size: 16px;
+	  	margin: 0 6rem;
+	}
+
+	.login-btn {
+	  	margin: 0 6rem;
+	}
+
+	.footnote-container {
+		position: absolute;
+		width: 100%;
+		margin-top: 60px;
+	}
+}
+
+@media screen and (min-width: 621px) and (max-width: 767px) {
+	.form-group {
+		font-size: 16px;
+		margin: 0 10rem;
+	}
+
+	.login-btn {
+		margin: 0 10rem;
+	}
+
+	.footnote-container {
+		position: absolute;
+		width: 100%;
+		margin-top: 70px;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	body {
+	  	background-image: url('./login-bg-tablet-1.jpg') ;
+		background-position: center;
+		background-repeat:  no-repeat;
+		background-attachment: fixed;
+		background-size:  cover;
+	}
+
+	.welcome-title {
+	  	font-size: 24px;
+	}
+
+	.portal-title {
+	  	font-size: 18px;
+	}
+
+	.login-title {
+	  	margin: 150px 0 0;
+	}
+
+	.welcome-title {
+	  	margin: 25px 0;
+	}
+
+	.portal-title {
+	  	margin-top: 50px;
+	  	margin-bottom: 30px;
+	}
+
+	.btn {
+	  	font-size: 16px;
+	}
+
+	.form-group {
+	  	font-size: 16px;
+	  	margin: 0 15rem;
+	}
+
+	.login-btn {
+	  	margin: 0 15rem;
+	}
+
+	.footnote-container {
+		position: absolute;
+		width: 100%;
+		margin-top: 80px;
+	}
+}
+
+@media screen and (min-width: 905px) and (max-width: 1024px) {
+	.form-group {
+	  	font-size: 16px;
+		margin: 0 18rem;
+	}
+
+	.login-btn {
+	  	margin: 0 18rem;
+	}
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1400px) {
+	.form-group {
+	  	font-size: 16px;
+	  	margin: 0 24rem;
+	}
+
+	.login-btn {
+	  	margin: 0 24rem;
+	}
+}
+
+@media screen and (min-width: 1401px)  {
+	.form-group {
+	  	font-size: 16px;
+	  	margin: 0 32rem;
+	}
+
+	.login-btn {
+	  	margin: 0 32rem;
+	}
+}
+
+label {
+	text-transform: uppercase;
+	margin-bottom: -50px;
+    padding-left: 12px;
+    padding-top: 7px;
+    position: absolute;
+    font-size: 10px;
+    color: #C6C2C1;
+}
+
+.form-group {
+	margin-bottom: 0.5rem;
+	border: none;
+}
+
+.form-control {
+	border: none;
+	border-radius: 0px;
+	height: 50px;
+	border-bottom: 1px solid #CDC2C1;
+	font-size: 14px;
+	margin-bottom: 0.5rem;
+	padding-top: 18px;
+}
+
+.btn {
+	border-radius: 2px;
+	border: none;
+	color: white;
+	font-size: 14px;
+	height: 50px;
+	background: #2D8698; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#2D8698, #106984); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#2D8698, #106984); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#2D8698, #106984); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#2D8698, #106984); /* Standard syntax */
+}
+
+.login-btn {
+	padding-top: 20px;
+}
+
+.cx-logo {
+	width: 100%;
+	text-align: center;
+}
+
+.welcome-title {
+	color: white;
+	text-align: center;
+}
+
+.login-title {
+	color: white;
+	text-align: center;
+}
+
+.alert-danger {
+	width: 100%;
+}
+
+.alert {
+	border-radius: 2px;
+}
+
+@media screen and (max-width: 768px) {
+	.footnote-container {
+		font-size: 12px;
+	}
+	
+}
+
+.space {
+	background-color: transparent;
+	height: 100px;
+	display: block;
+	position: relative;
+	margin-top: 200px;
+}
+
+.footnote-0 {
+	margin-left: 15%;
+	width:75%;
+	color: white;
+	text-align: left;
+}
+
+.footnote-1 {
+	color: white;
+	text-align: center;
+}
+
+.footnote-2 {
+	color: white;
+	text-align: center;
+}
+
+.mailHyperlink {
+	color: white;
+}
+
+.mailHyperlink:hover {
+	color: white;
+
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+   20% { transform: rotate(3deg); }
+   30% { transform: rotate(0deg); }
+   40% { transform: rotate(3deg); }
+   50% { transform: rotate(0deg); }
+   60% { transform: rotate(-1.5deg);}
+   70% { transform: rotate(0deg);}
+}
+
+.alert-animate {
+	animation: wiggle 1s
+}
+
+.form-group-custom{
+	position: relative;
+}
+
+.custom-label{
+	position: absolute;
+	color: #4c4c4c;
+	font-size: 14px;
+	top:25%;
+	padding-left: 12px;
+	-webkit-transition: all 0.3s;
+	transition: all 0.3s;
+	pointer-events:none;
+}
+
+/* .custom-label-nonfocus{
+	color: #4c4c4c;
+	font-size: 16px;
+} */
+
+.custom-label-focus{
+	color: #767676;
+	font-size: 11px;
+	top: 10%;
+	-webkit-transition: all 0.3s;
+	transition: all 0.3s;
+	text-transform: uppercase;
+}
+
+
