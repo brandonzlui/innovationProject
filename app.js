@@ -59,6 +59,7 @@ require('./src/services/accountControl')(app, passport)
 app.use('/api', authenticate.userIsLogin, apiRouter)
 
 app.use('/login', express.static(path.join(__dirname, 'public/login/login.html')))
+app.use('/fonts', express.static(path.join(__dirname, 'public/fonts')))
 app.use(express.static(path.join(__dirname, 'public/login')))
 
 app.use('/index', authenticate.userIsLoginRedirect, express.static(path.join(__dirname, 'public/index.html')))

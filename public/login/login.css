@@ -1,6 +1,6 @@
 @font-face {
   	font-family: 'CathaySans';
-  	src: url('./fonts/CathaySans_Rg.ttf');
+  	src: url('./../fonts/CathaySans_Rg.ttf');
 }
 
 body {
