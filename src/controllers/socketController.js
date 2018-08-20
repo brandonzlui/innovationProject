@@ -23,6 +23,7 @@ module.exports = function(io) {
       // Join seat channel and init channel
       socket.join(`${flightCode}/${flightSeat}`)
       socket.join(`${flightCode}/${flightSeat}-init`)
+      socket.join(`${flightCode}/${flightSeat}-seatmap`)
 
       // Get plane data
       const [_, seatMap] = cxData.getSeatMap(flightCode)
@@ -49,8 +50,15 @@ module.exports = function(io) {
       // Add request to backend
       cxData.addRequest(request)
 
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
+      const seatData = {
+        available: seatMap.available,
+        pending: cxData.getPendingRequests(flightCode, fromSeat)
+      }
+
       // Emit to relevant channel
       io.emit(`${flightCode}/${toSeat}`, request.toJSON())
+      io.emit(`${flightCode}/${fromSeat}-seatmap`, seatData)
     })
 
     socket.on('multi-request', data => {

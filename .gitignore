@@ -6,3 +6,6 @@
 
 # nodeJS
 node_modules/
+
+# babel output
+public/js/lib/

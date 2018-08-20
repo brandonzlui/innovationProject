@@ -56,11 +56,15 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $(".modal-body").html("");
     });
 
-    $(document).on('click', '.seat > label', function (e) {
-      showModal(e.target.parentNode.id);
+    $(document).on('click', '.seat > label', function (event) {
+      var seatId = event.target.parentNode.id;
+
+      showModal(seatId);
+      $(document).off('click', '#confirm-swap');
       $(document).on('click', '#confirm-swap', function () {
-        confirmSwap(e.target.parentNode.id);
+        confirmSwap(seatId);
       });
+
       $('#companion1').click(function () {
         showFirstCompanion();return false;
       });
@@ -141,7 +145,18 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     });
 
     socket.on(flightCode + '/' + flightSeat + '-init', function (data) {
+      console.log('Data from -init: requests people have sent you');
       console.log(data);
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-seatmap', function (data) {
+      var available = data.available,
+          pending = data.pending;
+
+      console.log('Data from -seatmap: pending request updates, need to re-render ');
+      console.log(data);
+
+      $scope.FlightData.updatePending(pending);
     });
   });
 }]);

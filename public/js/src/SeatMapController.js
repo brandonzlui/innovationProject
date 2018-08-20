@@ -1,5 +1,3 @@
-
-
 app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', ($scope, $http, $state, $rootScope, FlightData) => {
   $scope.FlightData = FlightData
 
@@ -53,15 +51,19 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     // Click listener for AVAILABLE seat
     $(document).on('click', '.seat.free > label', event => console.log(`Clicked on free seat ${event.target.parentNode.id}`))
 
-    $(".modal").on("hidden.bs.modal", function(){
-      $(".modal-body").html("");
-    });
+    $(".modal").on("hidden.bs.modal", function() {
+      $(".modal-body").html("")
+    })
 
-    $(document).on('click', '.seat > label', function(e){
-      showModal(e.target.parentNode.id)
-      $(document).on('click', '#confirm-swap', function(){
-        confirmSwap(e.target.parentNode.id)
+    $(document).on('click', '.seat > label', function(event) {
+      const seatId = event.target.parentNode.id
+
+      showModal(seatId)
+      $(document).off('click', '#confirm-swap')
+      $(document).on('click', '#confirm-swap', function() {
+        confirmSwap(seatId)
       })
+
       $('#companion1').click(function() { showFirstCompanion(); return false;})
       $('#companion2').click(function() { showSecondCompanion(); return false;})
 
@@ -100,19 +102,19 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     }
     
     function confirmSwap(seat){
-        $('#confirm-swap-modal').modal('hide')
-        console.log(`Want to take seat ${seat}`)
-    
-        const request = {
-          flightCode: flightCode,
-          fromSeat: ownSeat,
-          toSeat: seat,
-          companions: [],
-          message: 'Please swap'
-        }
-    
-        $scope.FlightData.addOutgoingRequest(request)
-        socket.emit('single-request', request)
+      $('#confirm-swap-modal').modal('hide')
+      console.log(`Want to take seat ${seat}`)
+  
+      const request = {
+        flightCode: flightCode,
+        fromSeat: ownSeat,
+        toSeat: seat,
+        companions: [],
+        message: 'Please swap'
+      }
+  
+      $scope.FlightData.addOutgoingRequest(request)
+      socket.emit('single-request', request)
     }
   }
 
@@ -137,7 +139,16 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     })
     
     socket.on(`${flightCode}/${flightSeat}-init`, data => {
+      console.log(`Data from -init: requests people have sent you`)
       console.log(data)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-seatmap`, data => {
+      const { available, pending } = data
+      console.log(`Data from -seatmap: pending request updates, need to re-render `)
+      console.log(data)
+
+      $scope.FlightData.updatePending(pending)
     })
   })
 }])

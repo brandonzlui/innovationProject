@@ -54,10 +54,12 @@
       <img class="user-info d-lg-none" src="./assets/images/logout-icon.png" width="40" height="40" onmouseover="this.src='./assets/images/logout-icon-hover.png';"
         onmouseout="this.src='./assets/images/logout-icon.png';" data-toggle="modal" data-target="#logoutModal">
       <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="navbar-nav nav text-md-center justify-content-md-around">
+        <ul ng-cloak class="navbar-nav nav text-md-center justify-content-md-around">
           <li ng-repeat="section in sections" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
             <a href="#" class="nav-link" ng-click="changeState(section.stateName)">
-              <span class="link-text">{{section.title}}</span>
+              <span class="link-text">{{section.title}} 
+                <span class="badge badge-pill badge-primary">{{section.hasBadge && section.count > 0 ? section.count : ''}}</span>
+              </span>
             </a>
           </li>
 

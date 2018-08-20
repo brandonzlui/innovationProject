@@ -17,6 +17,7 @@ app.factory('FlightData', ($q) => {
     get: function() {
       const deferred = $q.defer()
 
+      // TODO have backend also return my pendings
       if (data) {
         deferred.resolve(data)
       } else {
@@ -29,7 +30,8 @@ app.factory('FlightData', ($q) => {
               flightSeat: flightSeat,
               plane: planeData,
               outgoing: [],
-              incoming: []
+              incoming: [],
+              pending: []
             }
 
             deferred.resolve(data)
@@ -49,8 +51,12 @@ app.factory('FlightData', ($q) => {
 
     addOutgoingRequest: function(request) {
       data.outgoing.push(request)
+    },
+
+    updatePending: function(pending) {
+      data.pending = pending
     }
-   }
+  }
 })
 
 // Components

@@ -31,7 +31,8 @@ app.factory('FlightData', function ($q) {
               flightSeat: flightSeat,
               plane: planeData,
               outgoing: [],
-              incoming: []
+              incoming: [],
+              pending: []
             };
 
             deferred.resolve(data);
@@ -51,6 +52,10 @@ app.factory('FlightData', function ($q) {
 
     addOutgoingRequest: function addOutgoingRequest(request) {
       data.outgoing.push(request);
+    },
+
+    updatePending: function updatePending(pending) {
+      data.pending = pending;
     }
   };
 });

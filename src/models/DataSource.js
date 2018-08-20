@@ -62,6 +62,12 @@ class DataSource {
     return this.requests.filter(activeRequest).filter(req => relevantSingleSwap(req) || relevantMultiSwap(req))
   }
 
+  getPendingRequests(flightCode, flightSeat) {
+    return this.requests.filter(request => request.flightCode == flightCode 
+                      && request.fromSeat == flightSeat 
+                      && request.status == null)
+  }
+
 }
 
 // Singleton pattern used for single source of truth
