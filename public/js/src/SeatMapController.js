@@ -52,21 +52,51 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
   
     // Click listener for AVAILABLE seat
     $(document).on('click', '.seat.free > label', event => console.log(`Clicked on free seat ${event.target.parentNode.id}`))
-  
+
+    $(".modal").on("hidden.bs.modal", function(){
+      $(".modal-body").html("");
+    });
 
     $(document).on('click', '.seat > label', function(e){
       showModal(e.target.parentNode.id)
       $(document).on('click', '#confirm-swap', function(){
         confirmSwap(e.target.parentNode.id)
       })
+      $('#companion1').click(function() { showFirstCompanion(); return false;})
+      $('#companion2').click(function() { showSecondCompanion(); return false;})
+
     });
 
     function showModal(seat){
       $("#details").remove()
       $("#confirm-swap-modal").modal('show')
       $("#confirm-body").prepend(`
-        <div id="details">Are you sure you want to swap from ${ownSeat} to ${seat}?</div>
+        <span id="details">Complete the following form to make a request for swapping from ${ownSeat} to ${seat}.
+        <div class="vs4"></div>
+        <div class="form-group">
+                    <label for="message">Message</label>
+                    <input type="text" class="form-control" placeholder="Enter a message">
+                </div>
+                <div class="vs4"></div>
+                <a id="companion1" href="#">Click here to add a companion.</a>
+                <div class="vs4"></div>
+                <a id="companion2" href="#"></a>
+            </div>
+        </span>
       `)
+    }
+
+    function showFirstCompanion(){
+      $("#companion1").empty();
+      $("#companion1").removeAttr("href");
+      $("#companion1").prepend(`<span>10B CHAN TAI MING</span>`);
+      $("#companion2").prepend(`<span>Click here to add a companion.</span>`);
+    }
+
+    function showSecondCompanion(){
+      $("#companion2").empty();
+      $("#companion2").removeAttr("href");
+      $("#companion2").prepend(`<span>9B TANG CHUN MING</span>`)
     }
     
     function confirmSwap(seat){

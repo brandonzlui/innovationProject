@@ -14,6 +14,20 @@ html {
   margin-bottom:16px;
 }
 
+.vs3 {
+  margin-bottom:24px;
+}
+
+.vs4 {
+  margin-bottom:32px;
+}
+
+.vs5 {
+  margin-bottom:50px;
+}
+
+
+
 .plane {
   margin: 20px auto;
   max-width: 300px;
