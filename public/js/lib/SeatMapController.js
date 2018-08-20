@@ -62,7 +62,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     function showModal(seat) {
       $("#details").remove();
       $("#confirm-swap-modal").modal('show');
-      $("#confirm-body").prepend('\n        <div id="details">Do you want to swap ' + seat + ' for ' + ownSeat + '</div>\n      ');
+      $("#confirm-body").prepend('\n        <div id="details">Are you sure you want to swap from ' + ownSeat + ' to ' + seat + '?</div>\n      ');
     }
 
     function confirmSwap(seat) {

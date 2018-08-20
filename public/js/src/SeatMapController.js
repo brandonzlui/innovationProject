@@ -65,7 +65,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $("#details").remove()
       $("#confirm-swap-modal").modal('show')
       $("#confirm-body").prepend(`
-        <div id="details">Do you want to swap ${seat} for ${ownSeat}</div>
+        <div id="details">Are you sure you want to swap from ${ownSeat} to ${seat}?</div>
       `)
     }
     
