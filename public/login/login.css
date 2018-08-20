@@ -32,8 +32,12 @@ html, body {
 		margin: 80px 0 30px;
 	}
 
+	.qr-title{
+		margin: 80px 0 30px;
+	}
+
 	.welcome-title {
-		margin: 25px 0;
+		margin: 45px 0;
 	}
 
 	.portal-title {
@@ -49,6 +53,10 @@ html, body {
 	}
 
 	.login-btn {
+		margin: 0 4rem;
+	}
+
+	.qr-btn {
 		margin: 0 4rem;
 	}
 
@@ -80,6 +88,10 @@ html, body {
 	  	margin: 0 6rem;
 	}
 
+	.qr-btn {
+		margin: 0 6rem;
+  }
+
 	.footnote-container {
 		position: absolute;
 		width: 100%;
@@ -94,6 +106,10 @@ html, body {
 	}
 
 	.login-btn {
+		margin: 0 10rem;
+	}
+
+	.qr-btn {
 		margin: 0 10rem;
 	}
 
@@ -125,8 +141,12 @@ html, body {
 	  	margin: 150px 0 0;
 	}
 
+	.qr-title{
+		margin: 150px 0 0;
+	}
+
 	.welcome-title {
-	  	margin: 25px 0;
+	  	margin: 45px 0;
 	}
 
 	.portal-title {
@@ -147,6 +167,10 @@ html, body {
 	  	margin: 0 15rem;
 	}
 
+	.qr-btn {
+		margin: 0 15rem;
+  }
+
 	.footnote-container {
 		position: absolute;
 		width: 100%;
@@ -163,6 +187,10 @@ html, body {
 	.login-btn {
 	  	margin: 0 18rem;
 	}
+
+	.qr-btn {
+		margin: 0 18rem;
+  }
 }
 
 @media screen and (min-width: 1025px) and (max-width: 1400px) {
@@ -174,6 +202,10 @@ html, body {
 	.login-btn {
 	  	margin: 0 24rem;
 	}
+
+	.qr-btn {
+		margin: 0 24rem;
+  }
 }
 
 @media screen and (min-width: 1401px)  {
@@ -185,6 +217,10 @@ html, body {
 	.login-btn {
 	  	margin: 0 32rem;
 	}
+
+	.qr-btn {
+		margin: 0 32rem;
+  }
 }
 
 label {
@@ -206,10 +242,10 @@ label {
 	border: none;
 	border-radius: 0px;
 	height: 50px;
-	border-bottom: 1px solid #CDC2C1;
 	font-size: 14px;
 	margin-bottom: 0.5rem;
 	padding-top: 18px;
+	background-color: rgba(255,255,255, 0.5);
 }
 
 .btn {
@@ -229,12 +265,21 @@ label {
 	padding-top: 20px;
 }
 
+.qr-btn {
+	padding-top: 20px;
+}
+
 .cx-logo {
 	width: 100%;
 	text-align: center;
 }
 
 .welcome-title {
+	color: white;
+	text-align: center;
+}
+
+.portal-title {
 	color: white;
 	text-align: center;
 }
