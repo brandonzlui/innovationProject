@@ -53,32 +53,36 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     // Click listener for AVAILABLE seat
     $(document).on('click', '.seat.free > label', event => console.log(`Clicked on free seat ${event.target.parentNode.id}`))
   
-    // Click listener for TAKEN seat
-    $(document).on('click', '.seat.taken > label', event => {
-      console.log(`Want to take seat ${event.target.parentNode.id}`)
-  
-      const request = {
-        flightCode: flightCode,
-        fromSeat: ownSeat,
-        toSeat: event.target.parentNode.id,
-        companions: [],
-        message: 'Please swap'
-      }
-  
-      $scope.FlightData.addOutgoingRequest(request)
-      socket.emit('single-request', request)
-    })
 
     $(document).on('click', '.seat > label', function(e){
       showModal(e.target.parentNode.id)
+      $(document).on('click', '#confirm-swap', function(){
+        confirmSwap(e.target.parentNode.id)
+      })
     });
 
     function showModal(seat){
-        $("#details").remove()
-        $("#confirm-swap").modal('show')
-        $("#confirm-body").prepend(`
+      $("#details").remove()
+      $("#confirm-swap-modal").modal('show')
+      $("#confirm-body").prepend(`
         <div id="details">Do you want to swap ${seat} for ${ownSeat}</div>
-        `)
+      `)
+    }
+    
+    function confirmSwap(seat){
+        $('#confirm-swap-modal').modal('hide')
+        console.log(`Want to take seat ${seat}`)
+    
+        const request = {
+          flightCode: flightCode,
+          fromSeat: ownSeat,
+          toSeat: seat,
+          companions: [],
+          message: 'Please swap'
+        }
+    
+        $scope.FlightData.addOutgoingRequest(request)
+        socket.emit('single-request', request)
     }
   }
 
