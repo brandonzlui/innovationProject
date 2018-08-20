@@ -8,6 +8,9 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', func
   }, {
     title: 'Postings',
     stateName: 'postings'
+  }, {
+    title: 'My Requests',
+    stateName: 'requests'
   }];
 
   $scope.changeState = function (stateName) {

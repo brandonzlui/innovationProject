@@ -8,6 +8,10 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', ($sc
     {
       title: 'Postings',
       stateName: 'postings'
+    },
+    {
+      title: 'My Requests',
+      stateName: 'requests'
     }
   ]
 

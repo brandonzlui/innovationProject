@@ -14,11 +14,3 @@ let flightSeat = localStorage.getItem('flightSeat')
 socket.on(`${flightCode}/${flightSeat}-init`, data => {
   console.log(data)
 })
-
-socket.on(`${flightCode}/${flightSeat}`, data => {
-  const { flightCode, fromSeat, toSeat, isSingle, message } = data
-
-  const type = isSingle ? 'one-to-one' : 'one-to-many'
-  console.log(`Received ${type} message from person at ${fromSeat}: ${message}`)
-  document.getElementById(fromSeat).className = 'seat option'
-})

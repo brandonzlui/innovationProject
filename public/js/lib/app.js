@@ -3,10 +3,55 @@
 var app = angular.module('seatCX', ['ui.router']);
 
 // Setup flight data
-app.factory('FlightData', function () {
-  alert('once pls');
+app.factory('FlightData', function ($q) {
+  var flightCode = localStorage.getItem('flightCode');
+  var flightSeat = localStorage.getItem('flightSeat');
+
+  // Join channels
+  socket.emit('create', {
+    flightCode: flightCode,
+    flightSeat: flightSeat
+  });
+
+  // Setup FlightData
+  var data = null;
   return {
-    Flight: 'CX888'
+    get: function get() {
+      var deferred = $q.defer();
+
+      if (data) {
+        deferred.resolve(data);
+      } else {
+        $.ajax({
+          url: './api/seatMap/' + flightCode,
+          method: 'GET',
+          success: function success(planeData) {
+            data = {
+              flightCode: flightCode,
+              flightSeat: flightSeat,
+              plane: planeData,
+              outgoing: [],
+              incoming: []
+            };
+
+            deferred.resolve(data);
+          },
+          error: function error(_error) {
+            deferred.reject(_error);
+          }
+        });
+      }
+
+      return deferred.promise;
+    },
+
+    addIncomingRequest: function addIncomingRequest(request) {
+      data.incoming.push(request);
+    },
+
+    addOutgoingRequest: function addOutgoingRequest(request) {
+      data.outgoing.push(request);
+    }
   };
 });
 
@@ -21,18 +66,21 @@ app.component('postings', {
   controller: 'PostingsController'
 });
 
+app.component('requests', {
+  templateUrl: 'views/requests.html',
+  controller: 'RequestsController'
+});
+
 // States
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-  $stateProvider.state({
-    name: 'seatmap',
-    url: '/',
-    component: 'seatmap'
-  });
 
-  $stateProvider.state({
-    name: 'postings',
-    url: '/',
-    component: 'postings'
+  var components = ['seatmap', 'postings', 'requests'];
+  components.forEach(function (component) {
+    $stateProvider.state({
+      name: component,
+      url: '/',
+      component: component
+    });
   });
 
   $urlRouterProvider.otherwise('/');

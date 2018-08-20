@@ -22,7 +22,7 @@ class DataSource {
   }
 
   addRequest(request) {
-    console.log(`[data-src] addded ${JSON.stringify(request.toJSON())}`)
+    console.log(`[data-src] added ${JSON.stringify(request.toJSON())}`)
     this.requests.push(request)
   }
 
