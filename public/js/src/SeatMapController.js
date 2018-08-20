@@ -68,6 +68,18 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $scope.FlightData.addOutgoingRequest(request)
       socket.emit('single-request', request)
     })
+
+    $(document).on('click', '.seat > label', function(e){
+      showModal(e.target.parentNode.id)
+    });
+
+    function showModal(seat){
+        $("#details").remove()
+        $("#confirm-swap").modal('show')
+        $("#confirm-body").prepend(`
+        <div id="details">Do you want to swap ${seat} for ${ownSeat}</div>
+        `)
+    }
   }
 
   $scope.FlightData.get().then(factory => {

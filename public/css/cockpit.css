@@ -147,6 +147,10 @@
     cursor: pointer;
     box-shadow: 0 0 0px 2px #5C6AFF;
   }
+
+  .rotate-45{
+    transform: rotate(45deg);
+  }
   
   @-webkit-keyframes rubberBand {
     0% {

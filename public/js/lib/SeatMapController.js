@@ -67,6 +67,16 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $scope.FlightData.addOutgoingRequest(request);
       socket.emit('single-request', request);
     });
+
+    $(document).on('click', '.seat > label', function (e) {
+      showModal(e.target.parentNode.id);
+    });
+
+    function showModal(seat) {
+      $("#details").remove();
+      $("#confirm-swap").modal('show');
+      $("#confirm-body").prepend('\n        <div id="details">Do you want to swap ' + seat + ' for ' + ownSeat + '</div>\n        ');
+    }
   }
 
   $scope.FlightData.get().then(function (factory) {
@@ -103,54 +113,9 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         setUpSeatMap(plane, incoming, flightSeat);
       });
     });
+
+    socket.on(flightCode + '/' + flightSeat + '-init', function (data) {
+      console.log(data);
+    });
   });
 }]);
-
-/**
- * $(document).ready(() => {
-  $.ajax({
-    url: `./api/seatMap/${localStorage.getItem('flightCode')}`,
-    method: 'GET',
-    async: true,
-    success: seatMapSuccess,
-    error: seatMapError
-  })
-})
-
-function seatMapSuccess(plane, status, jqXHR) {
-  const letters = ['A', 'B', 'C', 'D', 'E', 'F']
-
-  // Update cockpit
-  document.getElementById('flightCode').innerHTML = localStorage.getItem('flightCode')
-  document.getElementById('planeName').innerHTML = plane.name
-
-  // Render seat map
-  const cabin = document.getElementById('cabin')
-  const ownSeat = localStorage.getItem('flightSeat')
-  let html = ""
-
-  for (let i = 0; i < plane.rows; ++i) {
-    const rowNumber = String(i + 1)
-
-    html += `<li class="row row--${rowNumber}">`
-    html += `<ol class="seats" type="A">`
-    for (let j = 0; j < plane.seatsPerRow; ++j) {
-      const seat = rowNumber + letters[j]
-      const available = plane.available.includes(seat)
-
-      html += `
-        <li class="seat ${available ? 'free' : ''} ${ownSeat == seat ? 'me' : ''}" id="${seat}">
-          <input type="checkbox" />
-          <label for="${seat}">${seat}</label>
-        </li>
-      `
-    }
-
-    html += `</ol>`
-    html += `</li>`
-  }
-
-  cabin.innerHTML = html
-  refreshSeats()
-}
- */
