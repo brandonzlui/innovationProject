@@ -8,11 +8,15 @@ class MockOLCI {
     this.bookingData = {
       '1QAZ': {
         flightCode: MOCK_CODE,
-        flightSeat: '10A'
+        flightSeat: '6D'
       },
       '2WSX': {
         flightCode: MOCK_CODE,
-        flightSeat: '10C'
+        flightSeat: '10A'
+      },
+      '3EDC': {
+        flightCode: MOCK_CODE,
+        flightSeat: '10B'
       }
     }
 
