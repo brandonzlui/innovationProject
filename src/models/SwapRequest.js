@@ -8,7 +8,7 @@ class SwapRequest {
     this.message = message
 
     // Initialise unused fields
-    this.status = null
+    this.status = 'Pending'
     this.isSingle = null
     this.toSeat = null
     this.category = null
@@ -24,8 +24,8 @@ class SwapRequest {
     this.category = category
   }
 
-  setStatus(accepted) {
-    this.status = accepted
+  setStatus(status) {
+    this.status = status
   }
 
   toJSON() {

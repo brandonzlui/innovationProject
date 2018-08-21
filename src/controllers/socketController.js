@@ -5,6 +5,7 @@ const SwapRequest = require('../models/SwapRequest')
 module.exports = function(io) {
   io.on('connection', socket => {
     console.log(`${socket.id} connected`)
+
     socket.on('disconnect', () => {
       console.log(`${socket.id} disconnected`)
     })
@@ -12,31 +13,29 @@ module.exports = function(io) {
     socket.on('create', data => {
       const { flightCode, flightSeat } = data
 
-      console.log('Rooms: ' + socket.rooms)
-      for (let room in socket.rooms) {
-        console.log(room + '-' + socket.rooms[room])
-      } 
+      socket.join(flightCode)    // use for new seat map purposes
+      socket.join(`${flightCode}/${flightSeat}-init`)                         // use for REPLACE postings
+      console.log(`${socket.id} joined init`)
 
-      // Join flight channel
-      socket.join(flightCode)
-
-      // Join seat channel and init channel
-      socket.join(`${flightCode}/${flightSeat}`)
-      socket.join(`${flightCode}/${flightSeat}-init`)
-      socket.join(`${flightCode}/${flightSeat}-seatmap`)
-
-      // Get plane data
+      socket.join(`${flightCode}/${flightSeat}-request`)                      // use for NEW postings
       const [_, seatMap] = cxData.getSeatMap(flightCode)
       const col = flightSeat.slice(-1)
-      if (seatMap.aisle.includes(col)) socket.join(`${flightCode}/aisle`)
-      if (seatMap.window.includes(col)) socket.join(`${flightCode}/window`)
-  
-      console.log(`Creating data ${JSON.stringify(data)}`)
+      if (seatMap.aisle.includes(col)) socket.join(`${flightCode}/aisle`)     // use for NEW postings
+      if (seatMap.window.includes(col)) socket.join(`${flightCode}/window`)   // use for NEW postings
+
+      socket.join(`${flightCode}/${flightSeat}-pending`)                      // use for NEW pending
+      socket.join(`${flightCode}/${flightSeat}-accepted`)                     // use for NEW accepted
+      socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
+    })
+
+    socket.on('fetch', data => {
+      const { flightCode, flightSeat } = data
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
 
       // Send previous requests
-      const requests = cxData.getRequests(seatMap, flightSeat)
-      const serialisedRequests = JSON.stringify(requests.map(req => req.toJSON()))
-      io.emit(`${flightCode}/${flightSeat}-init`, serialisedRequests)
+      const requests = cxData.getRequests(seatMap, flightSeat).map(req => req.toJSON())
+      console.log(requests)
+      io.emit(`${flightCode}/${flightSeat}-init`, requests)
     })
 
     socket.on('single-request', data => {
@@ -50,18 +49,11 @@ module.exports = function(io) {
       // Add request to backend
       cxData.addRequest(request)
 
-      const [_, seatMap] = cxData.getSeatMap(flightCode)
-      const seatData = {
-        available: seatMap.available,
-        pending: cxData.getPendingRequests(flightCode, fromSeat).map(req => {
-          req.status = 'Pending'
-          return req
-        })
-      }
+      // Emit new posting
+      io.emit(`${flightCode}/${toSeat}-request`, request.toJSON())
 
-      // Emit to relevant channel
-      io.emit(`${flightCode}/${toSeat}`, request.toJSON())
-      io.emit(`${flightCode}/${fromSeat}-seatmap`, seatData)
+      // Emit new pending
+      io.emit(`${flightCode}/${fromSeat}-pending`, request.toJSON())
     })
 
     socket.on('multi-request', data => {
@@ -77,24 +69,6 @@ module.exports = function(io) {
 
       // Emit to channels
       io.emit(`${flightCode}/${category}`, request.toJSON())
-    })
-  
-    socket.on('request', data => {
-      // Parse request
-      const { flightCode, fromSeat, toSeat, companions, message } = data
-
-      // Build request object
-      const toSeats = Array.isArray(toSeat) ? toSeat : [toSeat]
-
-      // Add request to backend
-      const request = new SwapRequest(flightCode, fromSeat, toSeats, companions, message)
-      cxData.addRequest(request)
-
-      //
-  
-      // build message to other guy
-      console.log(`Emitting to channel ${flightCode}/${toSeat}`)
-      io.emit(`${flightCode}/${toSeat}`, data)
     })
 
     socket.on('accept', data => {

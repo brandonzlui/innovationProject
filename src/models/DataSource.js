@@ -42,7 +42,7 @@ class DataSource {
 
   getRequests(seatMap, flightSeat) {
     function activeRequest(request) {
-      return request.status == null
+      return request.status == 'Pending'
     }
 
     function relevantSingleSwap(request) {
@@ -65,7 +65,7 @@ class DataSource {
   getPendingRequests(flightCode, flightSeat) {
     return this.requests.filter(request => request.flightCode == flightCode 
                       && request.fromSeat == flightSeat 
-                      && request.status == null)
+                      && request.status == 'Pending')
   }
 
 }
