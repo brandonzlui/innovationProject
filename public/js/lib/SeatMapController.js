@@ -59,18 +59,24 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     $(document).on('click', '.seat > label', function (event) {
       var seatId = event.target.parentNode.id;
 
-      showModal(seatId);
-      $(document).off('click', '#confirm-swap');
-      $(document).on('click', '#confirm-swap', function () {
-        confirmSwap(seatId);
-      });
+      // if pending, show accept modal
+      if ($(event.target).is('.seat.me > label')) {} else if ($(event.target).is('.seat.taken.option > label')) {
+        showAcceptModal(seatId);
+      } else {
 
-      $('#companion1').click(function () {
-        showFirstCompanion();return false;
-      });
-      $('#companion2').click(function () {
-        showSecondCompanion();return false;
-      });
+        showConfirmModal(seatId);
+        $(document).off('click', '#confirm-swap');
+        $(document).on('click', '#confirm-swap', function () {
+          confirmSwap(seatId);
+        });
+
+        $('#companion1').click(function () {
+          showFirstCompanion();return false;
+        });
+        $('#companion2').click(function () {
+          showSecondCompanion();return false;
+        });
+      }
     });
 
     $('#aisle-button').click(function () {
@@ -83,7 +89,12 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       showLogoutModal();return false;
     });
 
-    function showModal(seat) {
+    function showAcceptModal(seat) {
+      $('#accept-details').remove();
+      $('#modal-accept').modal('show');
+      $('#modal-body-accept').prepend('\n        <span id="accept-details">Accept incoming seat swap from ' + seat + '?</span)\n        ');
+    }
+    function showConfirmModal(seat) {
       $("#details").remove();
       $("#confirm-swap-modal").modal('show');
       $("#confirm-body").prepend('\n        <span id="details">Complete the following form to make a request for swapping from ' + ownSeat + ' to ' + seat + '.\n        <div class="vs4"></div>\n        <div class="form-group">\n                    <label for="message">Message</label>\n                    <input type="text" class="form-control" placeholder="Enter a message">\n                </div>\n                <div class="vs4"></div>\n                <a id="companion1" href="#">Click here to add a companion.</a>\n                <div class="vs4"></div>\n                <a id="companion2" href="#"></a>\n            </div>\n        </span>\n      ');

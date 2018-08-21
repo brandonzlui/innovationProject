@@ -137,7 +137,7 @@ ol {
   animation-fill-mode: both;
 }
 .seat input[type=checkbox]:disabled + label {
-  background: #dddddd;
+  background: #a37676;
   text-indent: -9999px;
   overflow: hidden;
 }
@@ -152,6 +152,9 @@ ol {
 .seat input[type=checkbox]:disabled + label:hover {
   box-shadow: none;
   cursor: not-allowed;
+}
+.seat.me label {
+  background:blue!important;
 }
 .seat label {
   display: block;
