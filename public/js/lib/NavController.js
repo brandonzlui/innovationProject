@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', function ($scope, $http, $state, $rootScope, FlightData) {
-  console.log('Nav sections: ' + $scope.sections);
+  console.log('NavController loaded!');
   $scope.sections = [{
     title: 'Seat Map',
     stateName: 'seatmap',
@@ -30,8 +30,6 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
         pending = data.pending;
 
     $scope.sections[2].count = pending.length;
-
-    if (!$scope.$$phase) $scope.$apply();
 
     socket.on(flightCode + '/' + flightSeat + '-seatmap', function (data) {
       var pending = data.pending;

@@ -1,6 +1,7 @@
 'use strict';
 
 app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', function ($scope, $http, $state, $rootScope, FlightData) {
+  console.log('RequestsController loaded!');
   $scope.FlightData = FlightData;
   $scope.myRequests = [];
 

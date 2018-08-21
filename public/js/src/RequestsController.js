@@ -1,4 +1,5 @@
 app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', ($scope, $http, $state, $rootScope, FlightData) => {
+  console.log('RequestsController loaded!')
   $scope.FlightData = FlightData
   $scope.myRequests = []
 

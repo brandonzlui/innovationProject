@@ -1,6 +1,7 @@
 'use strict';
 
 app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', function ($scope, $http, $state, $rootScope, FlightData) {
+  console.log('SeatMapController loaded!');
   $scope.FlightData = FlightData;
 
   function setUpSeatMap(plane, incoming, ownSeat) {
@@ -97,7 +98,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     function showConfirmModal(seat) {
       $("#details").remove();
       $("#confirm-swap-modal").modal('show');
-      $("#confirm-body").prepend('\n        <span id="details">Complete the following form to make a request for swapping from ' + ownSeat + ' to ' + seat + '.\n        <div class="vs4"></div>\n        <div class="form-group">\n                    <label for="message">Message</label>\n                    <input type="text" class="form-control" placeholder="Enter a message">\n                </div>\n                <div class="vs4"></div>\n                <a id="companion1" href="#">Click here to add a companion.</a>\n                <div class="vs4"></div>\n                <a id="companion2" href="#"></a>\n            </div>\n        </span>\n      ');
+      $("#confirm-body").prepend('\n        <span id="details">Complete the following form to make a request for swapping from ' + ownSeat + ' to ' + seat + '.\n          <div class="vs4"></div>\n          <div class="form-group">\n            <label for="message">Message</label>\n            <input type="text" class="form-control" placeholder="Enter a message" id="swapMessage">\n          </div>\n          <div class="vs4"></div>\n          <a id="companion1" href="#">Click here to add a companion.</a>\n          <div class="vs4"></div>\n          <a id="companion2" href="#"></a>\n          </div>\n        </span>\n      ');
     }
 
     function showAisleModal() {
@@ -142,7 +143,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         fromSeat: ownSeat,
         toSeat: seat,
         companions: [],
-        message: 'Please swap'
+        message: $('#swapMessage').val()
       };
 
       $scope.FlightData.addOutgoingRequest(request);
