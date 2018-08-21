@@ -1,4 +1,4 @@
-<h1 class="vs2">Postings</h1>
+<h1 class="page-title">Postings</h1>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -22,7 +22,7 @@
 </div>
 
 <div class="list-group vs2" ng-repeat="request in requests">
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">{{request.fromSeat}} wants to swap seat with you</h5>
       <small></small>
@@ -34,7 +34,3 @@
   Respond
 </button>
   </div>
-
-<ul>
-  <li ng-repeat="request in requests">{{request}}</li>
-</ul>
