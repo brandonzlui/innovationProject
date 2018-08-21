@@ -71,15 +71,16 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $('#companion2').click(function () {
         showSecondCompanion();return false;
       });
-      $('.logout-icon').click(function () {
-        showLogoutModal();return false;
-      });
-      $('#aisle-button').click(function () {
-        showAisleModal();return false;
-      });
-      $('#window-button').click(function () {
-        showWindowModal();return false;
-      });
+    });
+
+    $('#aisle-button').click(function () {
+      showAisleModal();return false;
+    });
+    $('#window-button').click(function () {
+      showWindowModal();return false;
+    });
+    $('.logout-icon').click(function () {
+      showLogoutModal();return false;
     });
 
     function showModal(seat) {
@@ -89,15 +90,16 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     }
 
     function showAisleModal() {
+      console.log("testing");
       $("#modal-body-aisle").empty();
       $("#modal-aisle").modal('show');
-      $("#modal-body-aisle").prepend('<span>Are you sure you want to request for an aisle seat? You will be allocated to the frontmost aisle seat if they are available.</span>');
+      $("#modal-body-aisle").prepend('<span>Are you sure you want to request for an <b>aisle seat</b>? You will be allocated to the frontmost aisle seat if they are available.</span>');
     }
 
     function showWindowModal() {
       $("#modal-body-window").empty();
       $("#modal-window").modal('show');
-      $("#modal-body-window").prepend('<span>Are you sure you want to request for a window seat? You will be allocated to the frontmost window seat if they are available.</span>');
+      $("#modal-body-window").prepend('<span>Are you sure you want to request for a <b>window seat</b>? You will be allocated to the frontmost window seat if they are available.</span>');
     }
 
     function showLogoutModal() {
