@@ -1,4 +1,10 @@
-<h1 class="page-title">SeatMap</h1>
+<div class="row">
+    <div class="welcome-holder">
+      <div class="welcome-title-1">Welcome to Flight CX888</div>
+    </div>
+</div>
+
+<h1>SeatMap</h1>
 
 <section id="seat-map" name="seat-map">
   <div class="plane">
@@ -13,14 +19,21 @@
   </div>
 </section>
 
-<div>
-  <button type="button" class="btn btn-light aisle-button-align" data-toggle="modal" data-target="#modal-aisle" id="aisle-button">
-  Request Aisle Seat
-  </button>
-
-  <button type="button" class="btn btn-light window-button-align" data-toggle="modal" data-target="#modal-window" id="window-button">
-  Request Window Seat
-  </button>
+<div class="row">
+  <div class="col-5 col-sm-4 col-md-3">
+    <div class="wrapper">
+      <button type="button" class="btn request" data-toggle="modal" data-target="#modal-aisle" id="aisle-button">
+        Request Aisle Seat
+      </button>
+   </div>
+  </div>
+  <div class="col-5 col-sm-4 col-md-3">
+    <div class="wrapper">
+      <button type="button" class="btn request" data-toggle="modal" data-target="#modal-window" id="window-button">
+        Request Window Seat
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Aisle Seat Modal -->

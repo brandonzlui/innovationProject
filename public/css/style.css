@@ -72,7 +72,7 @@ body{
       color: #006564;
   }
   .welcome-holder {
-      margin-left: 8px;
+      text-align: center;
   }
   .section-zero {
       padding: 10px 25px;
@@ -100,7 +100,7 @@ body{
       color: #006564;
   }
   .welcome-holder {
-      margin-left: 8px;
+    text-align: center;
   }
   .section-zero {
       padding: 10px 25px;
@@ -118,8 +118,7 @@ body{
       padding-top: 3px;
   }
   .welcome-holder {
-      padding-top: 6px;
-      width: 700px;
+    text-align: center;
   }
   .welcome-title-1 {
       font-size: 22px;
@@ -214,10 +213,7 @@ body{
 .list-group-item small {
   font-size: 11px;
 }
-.container {
-  padding-bottom: 10px;
-  padding-top: 5px;
-}
+
 .svg-container {
   margin-bottom: 150px;
 }
@@ -227,6 +223,10 @@ body{
 } */
 
 @media screen and (max-width: 320px) {
+  .container {
+    padding-bottom: 10px;
+    padding-top: 25%;
+  }
   .clock{
       -webkit-transform: scale(0.33);
       transform: scale(0.33);
@@ -234,6 +234,10 @@ body{
   }
 }
 @media screen and (min-width: 320px) and (max-width: 374px) {
+  .container {
+    padding-bottom: 10px;
+    padding-top: 25%;
+  }
   .clock {
       -webkit-transform: scale(0.43);
       transform: scale(0.43);
@@ -264,6 +268,10 @@ body{
   }
 }
 @media screen and (min-width: 375px) and (max-width: 428px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 20%;
+  }
   .clock {
     -webkit-transform: scale(0.52);
     transform: scale(0.52);
@@ -296,6 +304,10 @@ body{
   }
 }
 @media screen and (min-width: 428px) and (max-width: 536px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 20%;
+  }
   .clock {
     -webkit-transform: scale(0.6);
     transform: scale(0.6);
@@ -328,6 +340,10 @@ body{
   }
 }
 @media screen and (min-width: 536px) and (max-width: 992px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 11%;
+  }
   .clock {
     -webkit-transform: scale(0.75);
     transform: scale(0.75);
@@ -360,6 +376,10 @@ body{
   }
 }
 @media screen and (min-width: 992px) and (max-width: 1023px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 1%;
+  }
   .clock {
       -webkit-transform: scale(1);
       transform: scale(1);
@@ -390,18 +410,30 @@ body{
   }
 }
 @media screen and (min-width: 768px) and (max-width: 991px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 9%;
+  }
   .svg-container {
       margin-right: 10rem;
       margin-left: 10rem;
   }
 }
 @media screen and (min-width: 991px) and (max-width: 1023px){
+  .container {
+    padding-bottom: 10px;
+    padding-top: 1%;
+  }
   .svg-container {
       margin-right: 12rem;
       margin-left: 12rem;
   }
 }
 @media screen and (min-width: 1024px) {
+  .container {
+    padding-bottom: 10px;
+    padding-top: 1%;
+  }
   .svg-container {
       margin-right: 18rem;
       margin-left: 18rem;
@@ -776,25 +808,12 @@ a:focus {
   }
 }
 /* For the footer */
-.sponsor-footer{
-  font-size: 14px;
-  text-align: center;
-  color: #4c4c4c;
-}
-.sponsor-footer .logo{
-  max-height: 3rem;
-  height: auto;
-  max-width: 100%;
-}
-.sponsor-footer .padding-top{
-  padding-top: 16px;
-}
 .cathay-logo-footer{
   text-align: center;
-  margin-top: 24px;
+  margin-top: 2%;
   padding: 0;
   font-size: 90%;
-  padding-bottom: 100px;
+
 }
 .dim-overlay{
   position: absolute;
