@@ -50,11 +50,19 @@ app.factory('FlightData', ($q) => {
     },
 
     addOutgoingRequest: function(request) {
+      for (let entry of data.outgoing) {
+        if (entry.created == request.created && entry.toSeat == request.toSeat) return
+      }
+
       data.outgoing.push(request)
     },
 
     updatePending: function(pending) {
       data.pending = pending
+    },
+
+    replaceIncomingRequests: function(incoming) {
+      data.incoming = incoming
     }
   }
 })

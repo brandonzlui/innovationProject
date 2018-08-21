@@ -8,21 +8,17 @@ app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope',
   $scope.FlightData.get().then(function (data) {
     var flightCode = data.flightCode,
         flightSeat = data.flightSeat,
-        pending = data.pending;
+        outgoing = data.outgoing;
 
 
     console.log('[requestCtrl] refreshed data');
-    $scope.myRequests = pending;
+    $scope.myRequests = outgoing;
 
-    socket.on(flightCode + '/' + flightSeat + '-seatmap', function (data) {
-      $scope.FlightData.get().then(function (data) {
-        var pending = data.pending;
-
-        $scope.myRequests = pending;
-
-        console.log('myRequest: ');
-        console.log($scope.myRequests);
-      });
-    });
+    // socket.on(`${flightCode}/${flightSeat}-pending`, pending => {
+    //   // Add pending
+    //   console.log(`ADDING request ${pending.created}`)
+    //   $scope.FlightData.addOutgoingRequest(pending)
+    //   $scope.myRequests = [pending].concat($scope.myRequests)
+    // })
   });
 }]);

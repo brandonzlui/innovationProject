@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * LEGEND:
+ * .free := seat available
+ * .taken := seat not available
+ * .option := seat up for swap (that person is asking you)
+ * .me := your seat
+ */
+
 app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', function ($scope, $http, $state, $rootScope, FlightData) {
   console.log('SeatMapController loaded!');
   $scope.FlightData = FlightData;
@@ -102,7 +110,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     }
 
     function showAisleModal() {
-      console.log("testing");
       $("#modal-body-aisle").empty();
       $("#modal-aisle").modal('show');
       $("#modal-body-aisle").prepend('<span>Are you sure you want to request for an <b>aisle seat</b>? You will be allocated to the frontmost aisle seat if they are available.</span>');
@@ -146,7 +153,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         message: $('#swapMessage').val()
       };
 
-      $scope.FlightData.addOutgoingRequest(request);
       socket.emit('single-request', request);
     }
   }
@@ -162,43 +168,93 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     setUpSeatMap(plane, incoming, flightSeat);
 
-    socket.on(flightCode + '/' + flightSeat, function (data) {
-      var flightCode = data.flightCode,
-          fromSeat = data.fromSeat,
-          toSeat = data.toSeat,
-          isSingle = data.isSingle,
-          message = data.message;
-
-
-      var type = isSingle ? 'one-to-one' : 'one-to-many';
-      console.log('Received ' + type + ' message from person at ' + fromSeat + ': ' + message);
-
-      $scope.FlightData.addIncomingRequest(data);
-
-      $scope.FlightData.get().then(function (factory) {
-        var flightCode = factory.flightCode,
-            flightSeat = factory.flightSeat,
-            plane = factory.plane,
-            outgoing = factory.outgoing,
-            incoming = factory.incoming;
-
-        setUpSeatMap(plane, incoming, flightSeat);
-      });
+    // ---- Socket handlers ----- //
+    socket.on(flightCode + '/' + flightSeat + '-pending', function (request) {
+      $scope.FlightData.addOutgoingRequest(request);
     });
 
-    socket.on(flightCode + '/' + flightSeat + '-init', function (data) {
-      console.log('Data from -init: requests people have sent you');
-      console.log(data);
+    socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
+      /**
+       * 1. update data source
+       * 2. seat map needs to reflect change
+       */
+      $scope.FlightData.addIncomingRequest(request);
+      handleNewRequest(request);
     });
 
-    socket.on(flightCode + '/' + flightSeat + '-seatmap', function (data) {
-      var available = data.available,
-          pending = data.pending;
-
-      console.log('Data from -seatmap: pending request updates, need to re-render ');
-      console.log(data);
-
-      $scope.FlightData.updatePending(pending);
+    socket.on(flightCode + '/aisle', function (request) {
+      $scope.FlightData.addIncomingRequest(request);
+      handleNewRequest(request);
     });
+
+    socket.on(flightCode + '/window', function (request) {
+      $scope.FlightData.addIncomingRequest(request);
+      handleNewRequest(request);
+    });
+
+    // TODO
+    socket.on(flightCode + '/' + flightSeat + '-accepted', function (request) {});
+
+    // TODO
+    socket.on(flightCode + '/' + flightSeat + '-declined', function (request) {});
+
+    socket.on(flightCode, function (available) {
+      // Reset all available seats
+      var oldFrees = document.getElementsByClassName('seat free');
+      for (var i = 0; i < oldFrees.length; ++i) {
+        oldFrees[i].className = 'seat taken';
+      }
+
+      // Loop through and add new availables
+      for (var _i = 0; _i < available.length; ++_i) {
+        available[_i].className = 'seat free';
+      }
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-init', function (postings) {
+      $scope.FlightData.replaceIncomingRequests(postings);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = postings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var request = _step.value;
+          handleNewRequest(request);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    });
+
+    socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat });
   });
+
+  function handleNewRequest(request) {
+    var flightCode = request.flightCode,
+        fromSeat = request.fromSeat,
+        toSeat = request.toSeat,
+        isSingle = request.isSingle,
+        companions = request.companions,
+        message = request.message;
+
+    // Debugging console logs
+
+    var type = isSingle ? 'one-to-one' : 'one-to-many';
+    console.log('Received ' + type + ' message from person at ' + fromSeat + ': ' + message);
+
+    // DOM update
+    document.getElementById(fromSeat).className = 'seat option';
+  }
 }]);

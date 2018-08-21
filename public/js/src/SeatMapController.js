@@ -1,3 +1,11 @@
+/**
+ * LEGEND:
+ * .free := seat available
+ * .taken := seat not available
+ * .option := seat up for swap (that person is asking you)
+ * .me := your seat
+ */
+
 app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', ($scope, $http, $state, $rootScope, FlightData) => {
   console.log('SeatMapController loaded!')
   $scope.FlightData = FlightData
@@ -107,7 +115,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     }
 
     function showAisleModal() {
-      console.log("testing");
       $("#modal-body-aisle").empty();
       $("#modal-aisle").modal('show');
       $("#modal-body-aisle").prepend(`<span>Are you sure you want to request for an <b>aisle seat</b>? You will be allocated to the frontmost aisle seat if they are available.</span>`);
@@ -153,7 +160,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         message: $('#swapMessage').val()
       }
   
-      $scope.FlightData.addOutgoingRequest(request)
       socket.emit('single-request', request)
     }
   }
@@ -163,32 +169,71 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     // Setup seat map
     setUpSeatMap(plane, incoming, flightSeat)
-    
-    socket.on(`${flightCode}/${flightSeat}`, data => {
-      const { flightCode, fromSeat, toSeat, isSingle, message } = data
-  
-      const type = isSingle ? 'one-to-one' : 'one-to-many'
-      console.log(`Received ${type} message from person at ${fromSeat}: ${message}`)
-  
-      $scope.FlightData.addIncomingRequest(data)
+
+    // ---- Socket handlers ----- //
+    socket.on(`${flightCode}/${flightSeat}-pending`, request => {
+      $scope.FlightData.addOutgoingRequest(request)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-request`, request => {
+      /**
+       * 1. update data source
+       * 2. seat map needs to reflect change
+       */
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    socket.on(`${flightCode}/aisle`, request => {
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    socket.on(`${flightCode}/window`, request => {
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    // TODO
+    socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
       
-      $scope.FlightData.get().then(factory => {
-        const { flightCode, flightSeat, plane, outgoing, incoming } = factory
-        setUpSeatMap(plane, incoming, flightSeat)
-      })
-    })
-    
-    socket.on(`${flightCode}/${flightSeat}-init`, data => {
-      console.log(`Data from -init: requests people have sent you`)
-      console.log(data)
     })
 
-    socket.on(`${flightCode}/${flightSeat}-seatmap`, data => {
-      const { available, pending } = data
-      console.log(`Data from -seatmap: pending request updates, need to re-render `)
-      console.log(data)
-
-      $scope.FlightData.updatePending(pending)
+    // TODO
+    socket.on(`${flightCode}/${flightSeat}-declined`, request => {
+      
     })
+
+    socket.on(flightCode, available => {
+      // Reset all available seats
+      const oldFrees = document.getElementsByClassName('seat free')
+      for (let i = 0; i < oldFrees.length; ++i) {
+        oldFrees[i].className = 'seat taken'
+      }
+
+      // Loop through and add new availables
+      for (let i = 0; i < available.length; ++i) {
+        available[i].className = 'seat free'
+      }
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-init`, postings => {
+      $scope.FlightData.replaceIncomingRequests(postings)
+      for (let request of postings) handleNewRequest(request)
+    })
+
+    socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat })
   })
+
+  function handleNewRequest(request) {
+    const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
+
+    // Debugging console logs
+    const type = isSingle ? 'one-to-one' : 'one-to-many'
+    console.log(`Received ${type} message from person at ${fromSeat}: ${message}`)
+
+    // DOM update
+    document.getElementById(fromSeat).className = 'seat option'
+  }
+
 }])

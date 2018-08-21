@@ -31,11 +31,17 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
 
     $scope.sections[2].count = pending.length;
 
-    socket.on(flightCode + '/' + flightSeat + '-seatmap', function (data) {
-      var pending = data.pending;
+    socket.on(flightCode + '/' + flightSeat + '-pending', function () {
+      setTimeout(function () {
+        $scope.FlightData.get().then(function (data) {
+          var outgoing = data.outgoing;
 
-      $scope.sections[2].count = pending.length;
-      $scope.$apply();
+          $scope.sections[2].count = outgoing.filter(function (req) {
+            return req.status == 'Pending';
+          }).length;
+          $scope.$apply();
+        });
+      }, 500);
     });
   });
 }]);

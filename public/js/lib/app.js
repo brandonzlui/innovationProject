@@ -52,11 +52,40 @@ app.factory('FlightData', function ($q) {
     },
 
     addOutgoingRequest: function addOutgoingRequest(request) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = data.outgoing[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var entry = _step.value;
+
+          if (entry.created == request.created && entry.toSeat == request.toSeat) return;
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
       data.outgoing.push(request);
     },
 
     updatePending: function updatePending(pending) {
       data.pending = pending;
+    },
+
+    replaceIncomingRequests: function replaceIncomingRequests(incoming) {
+      data.incoming = incoming;
     }
   };
 });

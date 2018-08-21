@@ -30,12 +30,15 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
     const { flightSeat, flightCode, pending } = data
     $scope.sections[2].count = pending.length
 
-    socket.on(`${flightCode}/${flightSeat}-seatmap`, data => {
-      const { pending } = data
-      $scope.sections[2].count = pending.length
-      $scope.$apply()
+    socket.on(`${flightCode}/${flightSeat}-pending`, () => {
+      setTimeout(() => {
+        $scope.FlightData.get().then(data => {
+          const { outgoing } = data
+          $scope.sections[2].count = outgoing.filter(req => req.status == 'Pending').length
+          $scope.$apply()
+        })
+      }, 500)
     })
   })
-  
 
 }])

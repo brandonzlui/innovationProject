@@ -4,19 +4,16 @@ app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope',
   $scope.myRequests = []
 
   $scope.FlightData.get().then(data => {
-    const { flightCode, flightSeat, pending } = data
+    const { flightCode, flightSeat, outgoing } = data
 
     console.log(`[requestCtrl] refreshed data`)
-    $scope.myRequests = pending
+    $scope.myRequests = outgoing
 
-    socket.on(`${flightCode}/${flightSeat}-seatmap`, data => {
-      $scope.FlightData.get().then(data => {
-        const { pending } = data
-        $scope.myRequests = pending
-
-        console.log(`myRequest: `)
-        console.log($scope.myRequests)
-      })
-    })
+    // socket.on(`${flightCode}/${flightSeat}-pending`, pending => {
+    //   // Add pending
+    //   console.log(`ADDING request ${pending.created}`)
+    //   $scope.FlightData.addOutgoingRequest(pending)
+    //   $scope.myRequests = [pending].concat($scope.myRequests)
+    // })
   })  
 }])
