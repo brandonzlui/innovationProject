@@ -53,7 +53,10 @@ module.exports = function(io) {
       const [_, seatMap] = cxData.getSeatMap(flightCode)
       const seatData = {
         available: seatMap.available,
-        pending: cxData.getPendingRequests(flightCode, fromSeat)
+        pending: cxData.getPendingRequests(flightCode, fromSeat).map(req => {
+          req.status = 'Pending'
+          return req
+        })
       }
 
       // Emit to relevant channel

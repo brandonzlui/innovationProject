@@ -71,12 +71,33 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $('#companion2').click(function () {
         showSecondCompanion();return false;
       });
+      $('#logoutModal').click(function () {
+        showLogoutModal();return false;
+      });
+      $('#aisle-button').click(function () {
+        showAisleModal();return false;
+      });
+      $('#window-button').click(function () {
+        showWindowModal();return false;
+      });
     });
 
     function showModal(seat) {
       $("#details").remove();
       $("#confirm-swap-modal").modal('show');
       $("#confirm-body").prepend('\n        <span id="details">Complete the following form to make a request for swapping from ' + ownSeat + ' to ' + seat + '.\n        <div class="vs4"></div>\n        <div class="form-group">\n                    <label for="message">Message</label>\n                    <input type="text" class="form-control" placeholder="Enter a message">\n                </div>\n                <div class="vs4"></div>\n                <a id="companion1" href="#">Click here to add a companion.</a>\n                <div class="vs4"></div>\n                <a id="companion2" href="#"></a>\n            </div>\n        </span>\n      ');
+    }
+
+    function showAisleModal() {
+      $("#modal-body-aisle").prepend('<span>Are you sure you want to request for an aisle seat? You will be allocated to the frontmost aisle seat if they are available.</span>');
+    }
+
+    function showWindowModal() {
+      $("#modal-body-window").prepend('<span>Are you sure you want to request for a window seat? You will be allocated to the frontmost window seat if they are available.</span>');
+    }
+
+    function showLogoutModal() {
+      $("modal-body-logout").prepend('<span>Are you sure you want to logout?</span>');
     }
 
     function showFirstCompanion() {
