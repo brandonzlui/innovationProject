@@ -66,7 +66,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
       $('#companion1').click(function() { showFirstCompanion(); return false;})
       $('#companion2').click(function() { showSecondCompanion(); return false;})
-      $('#logoutModal').click(function() { showLogoutModal(); return false;})
+      $('.logout-icon').click(function() { showLogoutModal(); return false;})
       $('#aisle-button').click(function() { showAisleModal(); return false;})
       $('#window-button').click(function() { showWindowModal(); return false;})
 
@@ -92,21 +92,27 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     }
 
     function showAisleModal() {
+      $("#modal-body-aisle").empty();
+      $("#modal-aisle").modal('show');
       $("#modal-body-aisle").prepend(`<span>Are you sure you want to request for an aisle seat? You will be allocated to the frontmost aisle seat if they are available.</span>`);
     }
 
     function showWindowModal() {
+      $("#modal-body-window").empty();
+      $("#modal-window").modal('show');
       $("#modal-body-window").prepend(`<span>Are you sure you want to request for a window seat? You will be allocated to the frontmost window seat if they are available.</span>`);
     }
 
     function showLogoutModal() {
-        $("modal-body-logout").prepend(`<span>Are you sure you want to logout?</span>`);
+      $("#modal-body-logout").empty();
+      $("#logoutModal").modal('show');
+      $("#modal-body-logout").prepend(`<span>Are you sure you want to logout?</span>`);
     }
 
     function showFirstCompanion(){
       $("#companion1").empty();
       $("#companion1").removeAttr("href");
-      $("#companion1").prepend(`<span>10B CHAN TAI MING</span>`);
+      $("#companion1").prepend(`<span>10B</span>`);
       $("#companion1").off();
       $("#companion2").prepend(`<span>Click here to add a companion.</span>`);
       
@@ -115,7 +121,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     function showSecondCompanion(){
       $("#companion2").empty();
       $("#companion2").removeAttr("href");
-      $("#companion2").prepend(`<span>9B TANG CHUN MING</span>`)
+      $("#companion2").prepend(`<span>9B</span>`)
     }
     
     function confirmSwap(seat){
