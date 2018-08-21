@@ -26,6 +26,11 @@ html {
   margin-bottom:50px;
 }
 
+.page-title {
+  margin-top:20px;
+  text-align:center;
+}
+
 .wrapper{
   text-align: center;
 }
