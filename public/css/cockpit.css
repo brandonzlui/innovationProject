@@ -26,16 +26,9 @@ html {
   margin-bottom:50px;
 }
 
-.aisle-button-align {
-  margin-left:30%;
+.wrapper{
+  text-align: center;
 }
-
-.window-button-align {
-  margin-left:55%;
-  margin-top:-6%;
-}
-
-
 
 .plane {
   margin: 20px auto;
@@ -391,3 +384,22 @@ ol {
     animation-name: rubberBand;
   }
   
+  .btn {
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.request {
+    border: 2px solid;
+    border-radius: 5px;
+    border-color: #006564;
+    color: #006564;
+}
+
+.request:hover {
+    border: 2px solid;
+    border-radius: 5px;
+    background-color: #006564;
+    color: white;
+}

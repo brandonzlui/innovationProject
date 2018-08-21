@@ -153,9 +153,42 @@ html, body {
 	  	margin-top: 50px;
 	  	margin-bottom: 30px;
 	}
-
+	/*.btn {
+		border-radius: 2px;
+		border: none;
+		color: white;
+		font-size: 14px;
+		height: 50px;
+		background: #2D8698; /* For browsers that do not support gradients */
+		/*background: -webkit-linear-gradient(#2D8698, #106984); /* For Safari 5.1 to 6.0 */
+		/*background: -o-linear-gradient(#2D8698, #106984); /* For Opera 11.1 to 12.0 */
+		/*background: -moz-linear-gradient(#2D8698, #106984); /* For Firefox 3.6 to 15 */
+		/*background: linear-gradient(#2D8698, #106984); /* Standard syntax */
+	/*}*/
+	
 	.btn {
-	  	font-size: 16px;
+		font-size: 14px;
+		border: 2px solid black;
+   		background-color:transparent;
+ 		border-radius: 5px;
+ 		color: black;
+		height: 50px;
+		cursor: pointer;
+		padding: 14px 28px;
+
+	}
+	.login {
+		border-color: #006564;
+		color: #006564;
+	}
+	
+	.login:hover {
+		background-color: #006564;
+		color: white;
+	}
+
+	.wrapper {
+		text-align: center;
 	}
 
 	.form-group {
@@ -246,19 +279,6 @@ label {
 	margin-bottom: 0.5rem;
 	padding-top: 18px;
 	background-color: rgba(255,255,255, 0.5);
-}
-
-.btn {
-	border-radius: 2px;
-	border: none;
-	color: white;
-	font-size: 14px;
-	height: 50px;
-	background: #2D8698; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#2D8698, #106984); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#2D8698, #106984); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#2D8698, #106984); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#2D8698, #106984); /* Standard syntax */
 }
 
 .login-btn {
