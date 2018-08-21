@@ -92,7 +92,9 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $("#companion1").empty();
       $("#companion1").removeAttr("href");
       $("#companion1").prepend(`<span>10B CHAN TAI MING</span>`);
+      $("#companion1").off();
       $("#companion2").prepend(`<span>Click here to add a companion.</span>`);
+      
     }
 
     function showSecondCompanion(){
