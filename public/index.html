@@ -104,7 +104,7 @@
             <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button> -->
           </div>
           <hr align="center" width="95%">
-          <div class="modal-body">Are you sure you want to logout?</div>
+          <div class="modal-body" id="modal-body-logout"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal" id="logout">Confirm</button>
@@ -143,6 +143,58 @@
       </div>
     </div>
   </section> -->
+
+  <div>
+  <button type="button" class="btn btn-light aisle-button-align" data-toggle="modal" data-target="#modal-aisle" id="aisle-button">
+  Request Aisle Seat
+  </button>
+
+  <button type="button" class="btn btn-light window-button-align" data-toggle="modal" data-target="#modal-window" id="window-button">
+  Request Window Seat
+  </button>
+</div>
+
+<!-- Aisle Seat Modal -->
+<div class="modal fade" id="modal-aisle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Request Aisle Seat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-aisle">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Window Seat Modal -->
+<div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Request Aisle Seat</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-window">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Logo footer -->
   <div class="container cathay-logo-footer">
