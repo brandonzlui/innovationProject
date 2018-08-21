@@ -6,3 +6,5 @@
 
 ## Issues
 * Show spinner before seat map fully rendered
+* Legend image 
+* Footer padding

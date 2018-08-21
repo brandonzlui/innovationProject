@@ -19,6 +19,7 @@ app.factory('FlightData', function ($q) {
     get: function get() {
       var deferred = $q.defer();
 
+      // TODO have backend also return my pendings
       if (data) {
         deferred.resolve(data);
       } else {
