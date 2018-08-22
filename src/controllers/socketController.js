@@ -15,7 +15,7 @@ module.exports = function(io) {
 
       socket.join(flightCode)    // use for new seat map purposes
       socket.join(`${flightCode}/${flightSeat}-init`)                         // use for REPLACE postings
-      console.log(`${socket.id} joined init`)
+      console.log(`${socket.id} joined init for ${flightSeat}`)
 
       socket.join(`${flightCode}/${flightSeat}-request`)                      // use for NEW postings
       const [_, seatMap] = cxData.getSeatMap(flightCode)
@@ -84,17 +84,28 @@ module.exports = function(io) {
 
       const request = new SwapRequest(flightCode, fromSeat, companions, message)
       if (isSingle) request.setSingleSwap(toSeat)
+      // else TODO
+
       const updatedRequest = cxData.acceptRequest(request, created)
       if (!updatedRequest) {
-        console.error('cannot find!!!')
+        // console.error('cannot find!!!')
         return
       }
+
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
 
       // Tell creator that it has been accepted
       io.emit(`${flightCode}/${fromSeat}-accepted`, updatedRequest)
 
       // Tell whoever accepted to reset their map
       io.emit(`${flightCode}/${toSeat}-reset`, fromSeat)
+      unsubscribe(socket, flightCode, toSeat, seatMap)
+    })
+
+    socket.on('unsubscribe', data => {
+      const { flightCode, flightSeat } = data
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
+      unsubscribe(socket, flightCode, flightSeat, seatMap)
     })
 
     socket.on('decline', data => {
@@ -103,6 +114,23 @@ module.exports = function(io) {
        * 2. backend update source of truth through DataSource
        * 3. publish same request to channels (frontend handle rendering)
        */
+
+      // Parse request
+      const { created, flightCode, fromSeat, toSeat, isSingle, companions, message } = data
+      console.log(`${toSeat} declined request from ${fromSeat} created on ${created}`)
+
+      const request = new SwapRequest(flightCode, fromSeat, companions, message)
+      if (isSingle) request.setSingleSwap(toSeat)
+      // else TODO
+
+      const updatedRequest = cxData.declineRequest(request, created)
+      if (!updatedRequest) {
+        // console.error('cannot find!!!')
+        return
+      }
+
+      // Tell creator that it has been accepted
+      io.emit(`${flightCode}/${fromSeat}-declined`, updatedRequest)
     })
 
     socket.on('free', data => {
@@ -115,7 +143,8 @@ module.exports = function(io) {
 
       io.emit(`${flightCode}/${oldSeat}-reset`, newSeat)
       io.emit(flightCode, seatMap.available)
-      // TODO resubscribe
+
+      unsubscribe(socket, flightCode, oldSeat)
     })
 
     socket.on('cancel', data => {
@@ -123,3 +152,34 @@ module.exports = function(io) {
     })
   })
 }
+
+function unsubscribe(socket, flightCode, flightSeat, seatMap) {
+  socket.leave(`${flightCode}/${flightSeat}-init`)
+  socket.leave(`${flightCode}/${flightSeat}-pending`)
+  socket.leave(`${flightCode}/${flightSeat}-accepted`)
+  socket.leave(`${flightCode}/${flightSeat}-declined`)
+  socket.leave(`${flightCode}/${flightSeat}-reset`)
+
+  const col = flightSeat.slice(-1)
+  if (seatMap.aisle.includes(col)) socket.leave(`${flightCode}/aisle`)
+  if (seatMap.window.includes(col)) socket.leave(`${flightCode}/window`)
+
+  console.log(`${socket.id} left channels for ${flightSeat}`)
+}
+
+/*
+  socket.join(flightCode)    // use for new seat map purposes
+  socket.join(`${flightCode}/${flightSeat}-init`)                         // use for REPLACE postings
+  console.log(`${socket.id} joined init for ${flightSeat}`)
+
+  socket.join(`${flightCode}/${flightSeat}-request`)                      // use for NEW postings
+  const [_, seatMap] = cxData.getSeatMap(flightCode)
+  const col = flightSeat.slice(-1)
+  if (seatMap.aisle.includes(col)) socket.join(`${flightCode}/aisle`)     // use for NEW postings
+  if (seatMap.window.includes(col)) socket.join(`${flightCode}/window`)   // use for NEW postings
+
+  socket.join(`${flightCode}/${flightSeat}-pending`)                      // use for NEW pending
+  socket.join(`${flightCode}/${flightSeat}-accepted`)                     // use for NEW accepted
+  socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
+  socket.join(`${flightCode}/${flightSeat}-reset`)
+ */
