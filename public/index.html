@@ -67,26 +67,27 @@
     </nav>
 
     <!-- Logout modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header" style="border: none; display: flex; padding: 0 20px; margin-top: 20px;">
-            <h5 class="modal-title" id="logoutModal">Logout</h5>
-            <button type="button" class="close rotate-45" data-dismiss="modal" aria-label="Close">
-              <i class="icon icon-expand"></i>
-            </button>
-            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button> -->
-          </div>
-          <hr align="center" width="95%">
-          <div class="modal-body" id="modal-body-logout"></div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="logout">Confirm</button>
-          </div>
-        </div>
+
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <hr align="center" width="95%">
+      <div class="modal-body" id="modal-body-logout">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="logout">Yes</button>
       </div>
     </div>
   </div>
+</div>
+
 
   <div class="container">
     <ui-view></ui-view>

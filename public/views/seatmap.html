@@ -40,12 +40,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <hr align="center" width="95%">
       <div class="modal-body" id="modal-body-aisle">
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary">Yes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
@@ -61,12 +62,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <hr align="center" width="95%">
       <div class="modal-body" id="modal-body-window">
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="button" class="btn btn-primary">Yes</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
       </div>
     </div>
   </div>
@@ -78,10 +80,10 @@
 <div class="modal fade" id="confirm-swap-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header" style="border: none; display: flex; padding: 0 20px; margin-top: 20px;">
+            <div class="modal-header">
                 <h5 class="modal-title">Confirm Swap</h5>
-                <button type="button" class="close rotate-45" data-dismiss="modal" aria-label="Close">
-                  <i class="icon icon-expand"></i>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <hr align="center" width="95%">
@@ -116,7 +118,7 @@
   </div>
 </div>
 
-<script>
+<!--<script>
 $('#companion1').click(function() { showFirstCompanion(); return false;})
 $('#companion2').click(function() { showSecondCompanion(); return false;})
 $('.logout-icon').click(function() { showLogoutModal(); return false;})
@@ -158,7 +160,7 @@ function showAisleModal() {
       $("#companion2").prepend(`<span>9B</span>`)
 
 </script>
-
+-->
 
 
 

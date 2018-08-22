@@ -40,6 +40,20 @@ html {
   max-width: 300px;
 }
 
+.modal-header {
+  margin-top:10px;
+  margin-bottom:-10px;
+}
+
+.close {
+  margin-top:-45px !important;
+}
+
+.modal-footer .btn {
+  padding-top:7px;
+  padding-bottom:7px;
+}
+
 .cockpit {
   height: 250px;
   position: relative;
