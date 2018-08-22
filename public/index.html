@@ -119,6 +119,11 @@
     </div>
   </div>
 
+  <!--Loading-->
+  <div id="index-loading">
+      <img src="./assets/images/Universal_Loading_Icon.gif">
+  </div>
+
   <!-- Optional JavaScript -->
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -133,7 +138,10 @@
   <!-- WebSocket -->
   <script src="./lib/js/socket.io.js"></script>
   <script>
-    const socket = io()
+    const socket = io();
+    $("#index-loading").animate({opacity:0}, 1500, function(){
+    $("#index-loading").hide();
+    });
   </script>
 
   <!-- Angular -->
