@@ -8,7 +8,47 @@ body {
 }
 
 html, body {
+	overflow: hidden;
 	height: 100%;
+
+}
+
+.btn1 {
+	display: inline-block;
+	padding: 14px 28px;
+	background: none;
+	color:#006564;  
+	font-size: 14px;
+	position: relative;
+	transition:color 0.25s ease;
+	border:2px solid #006564;
+	border-radius: 5px;
+	width: 14rem;
+  }
+  
+  .btn1:hover {
+	color:white;
+  }
+  
+  .btn1::after {
+	position: absolute;
+	content: '';
+	top:0;
+	left: 0;
+	width: 0;
+	height: 100%;
+	background-color: #006564;
+	transform-origin:left;
+	transition:width 0.5s ease;
+	z-index:-1;
+  }
+  
+  .btn1:hover::after {
+	width: 100%;
+  }
+
+.wrapper {
+	text-align: center;
 }
 
 @media screen and (min-width: 320px) and (max-width: 768px) {
@@ -166,43 +206,7 @@ html, body {
 		/*background: linear-gradient(#2D8698, #106984); /* Standard syntax */
 	/*}*/
 	
-	.btn1 {
-		display: inline-block;
-		padding: 14px 28px;
-		background: none;
-		color:#006564;  
-		font-size: 14px;
-		position: relative;
-		transition:color 0.25s ease;
-		border:2px solid #006564;
-		border-radius: 5px;
-		width: 14rem;
-	  }
-	  
-	  .btn1:hover {
-		color:white;
-	  }
-	  
-	  .btn1::after {
-		position: absolute;
-		content: '';
-		top:0;
-		left: 0;
-		width: 0;
-		height: 100%;
-		background-color: #006564;
-		transform-origin:left;
-		transition:width 0.5s ease;
-		z-index:-1;
-	  }
-	  
-	  .btn1:hover::after {
-		width: 100%;
-	  }
 
-	.wrapper {
-		text-align: center;
-	}
 
 	.form-group {
 	  	font-size: 16px;
