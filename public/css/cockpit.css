@@ -37,7 +37,7 @@ html {
 
 .plane {
   margin: 20px auto;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .modal-header {
@@ -59,7 +59,7 @@ html {
   position: relative;
   overflow: hidden;
   text-align: center;
-  border-bottom: 5px solid #d8d8d8;
+  /* border-bottom: 5px solid #d8d8d8;*/
 }
 .cockpit:before {
   content: "";
@@ -69,9 +69,9 @@ html {
   left: 0;
   height: 500px;
   width: 100%;
-  border-radius: 100%;
+  /* border-radius: 100%;
   border-right: 5px solid #d8d8d8;
-  border-left: 5px solid #d8d8d8;
+  border-left: 5px solid #d8d8d8; */
 }
 .cockpit h1 {
   width: 60%;
@@ -85,8 +85,8 @@ html {
 .exit:before, .exit:after {
   content: "EXIT";
   font-size: 14px;
-  line-height: 18px;
-  padding: 0px 2px;
+  line-height: 30px;
+  padding: 0px 5px;
   font-family: "Arial Narrow", Arial, sans-serif;
   display: block;
   position: absolute;
@@ -173,7 +173,7 @@ ol {
   font-size: 14px;
   font-weight: bold;
   line-height: 1.5rem;
-  padding: 4px 0;
+  padding: 8px 0;
   background: #F42536;
   border-radius: 5px;
   animation-duration: 300ms;
@@ -316,7 +316,7 @@ ol {
     font-size: 14px;
     font-weight: bold;
     line-height: 1.5rem;
-    padding: 4px 0;
+    padding: 8px 0;
     background: #F42536;
     border-radius: 5px;
     animation-duration: 300ms;
