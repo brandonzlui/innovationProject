@@ -69,16 +69,14 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
       // if pending, show accept modal
       if ($(event.target).is('.seat.me > label')){}
-      else if ($(event.target).is('.seat.taken.option > label')) {
+      else if ($(event.target).is('.seat.option > label')) {
         showAcceptModal(seatId)
       } else {
-
         showConfirmModal(seatId)
         $(document).off('click', '#confirm-swap')
         $(document).on('click', '#confirm-swap', function() {
           confirmSwap(seatId)
         })
-
         $('#companion1').click(function() { showFirstCompanion(); return false;})
         $('#companion2').click(function() { showSecondCompanion(); return false;})
       }
