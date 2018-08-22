@@ -75,6 +75,13 @@ app.factory('FlightData', ($q) => {
 
     setAvailable: function(available) {
       data.plane.available = available
+    },
+
+    findIncomingRequest: function(fromSeat) {
+      for (let request of data.incoming) { 
+        if (request.fromSeat == fromSeat) return request
+      }
+      return null
     }
   }
 })

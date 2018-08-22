@@ -57,6 +57,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     $('#' + ownSeat + ' > input').prop('disabled', true);
 
     // Click listener for AVAILABLE seat
+    $(document).off('click', '.seat.free > label');
     $(document).on('click', '.seat.free > label', function (event) {
       var seatId = event.target.parentNode.id;
       console.log('Clicked on free seat ' + event.target.parentNode.id);
@@ -66,32 +67,57 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         oldSeat: ownSeat,
         newSeat: seatId
       });
+
+      $scope.FlightData.resetToNewSeat(seatId);
     });
 
     $(".modal").on("hidden.bs.modal", function () {
       $(".modal-body").html("");
     });
 
-    $(document).on('click', '.seat > label', function (event) {
+    $(document).on('click', '.seat.option > label', function (event) {
+      var toSeat = event.target.parentNode.id;
+
+      // get incoming request from data source
+      var request = $scope.FlightData.findIncomingRequest(toSeat);
+
+      // show accept modal
+      showAcceptModal(toSeat, request);
+    });
+
+    $(document).on('click', '.seat.taken > label', function (event) {
       var seatId = event.target.parentNode.id;
 
-      // if pending, show accept modal
-      if ($(event.target).is('.seat.me > label')) {} else if ($(event.target).is('.seat.option > label')) {
-        showAcceptModal(seatId);
-      } else {
-        showConfirmModal(seatId);
-        $(document).off('click', '#confirm-swap');
-        $(document).on('click', '#confirm-swap', function () {
-          confirmSwap(seatId);
-        });
-        $('#companion1').click(function () {
-          showFirstCompanion();return false;
-        });
-        $('#companion2').click(function () {
-          showSecondCompanion();return false;
-        });
-      }
+      showConfirmModal(seatId);
+      $(document).off('click', '#confirm-swap');
+      $(document).on('click', '#confirm-swap', function () {
+        confirmSwap(seatId);
+      });
+      $('#companion1').click(function () {
+        showFirstCompanion();return false;
+      });
+      $('#companion2').click(function () {
+        showSecondCompanion();return false;
+      });
     });
+
+    // $(document).on('click', '.seat > label', function(event) {
+    //   const seatId = event.target.parentNode.id
+
+    //   // if pending, show accept modal
+    //   if ($(event.target).is('.seat.me > label')){}
+    //   else if ($(event.target).is('.seat.option > label')) {
+    //     showAcceptModal(seatId)
+    //   } else {
+    //     showConfirmModal(seatId)
+    //     $(document).off('click', '#confirm-swap')
+    //     $(document).on('click', '#confirm-swap', function() {
+    //       confirmSwap(seatId)
+    //     })
+    //     $('#companion1').click(function() { showFirstCompanion(); return false;})
+    //     $('#companion2').click(function() { showSecondCompanion(); return false;})
+    //   }
+    // });
 
     $('#aisle-button').click(function () {
       showAisleModal();return false;
@@ -103,10 +129,19 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       showLogoutModal();return false;
     });
 
-    function showAcceptModal(seat) {
+    function showAcceptModal(seat, request) {
       $('#accept-details').remove();
       $('#modal-accept').modal('show');
       $('#modal-body-accept').prepend('\n        <span id="accept-details">Accept incoming seat swap from ' + seat + '?</span)\n        ');
+
+      $(document).off('click', '#modalAccept');
+      $(document).on('click', '#modalAccept', function (event) {
+        console.log('emitting request');
+        console.log(request);
+        socket.emit('accept', request);
+
+        $('#modal-accept').modal('hide');
+      });
     }
     function showConfirmModal(seat) {
       $("#details").remove();
@@ -228,6 +263,8 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     socket.on(flightCode + '/' + flightSeat + '-declined', function (request) {});
 
     socket.on(flightCode, function (available) {
+      console.log('got new seat map with new available set');
+      console.log(available);
       $scope.FlightData.setAvailable(available);
       $scope.FlightData.get().then(function (factory) {
         var flightCode = factory.flightCode,
@@ -268,7 +305,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     });
 
     socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
-      console.log('new seat ', newSeat);
       localStorage.setItem('flightSeat', newSeat);
       $scope.FlightData.resetToNewSeat(newSeat);
 
