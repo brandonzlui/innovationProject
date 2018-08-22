@@ -213,6 +213,17 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $scope.FlightData.addOutgoingRequest(request);
     });
 
+    $(document).off('click', '#requestWindow');
+    $(document).on('click', '#requestWindow', function (event) {
+      socket.emit('multi-request', {
+        flightCode: flightCode,
+        fromSeat: flightSeat,
+        category: 'window',
+        companions: [],
+        message: ''
+      });
+    });
+
     socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
       /**
        * 1. update data source
@@ -232,7 +243,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       handleNewRequest(request);
     });
 
-    // TODO
     socket.on(flightCode + '/' + flightSeat + '-accepted', function (request) {
       // Parse request
       var flightCode = request.flightCode,
