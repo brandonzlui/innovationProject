@@ -83,6 +83,14 @@ class DataSource {
                       && request.status == 'Pending')
   }
 
+  takeSeat(flightCode, seat) {
+    this.adapter.takeSeat(flightCode, seat)
+  }
+
+  releaseSeat(flightCode, seat) {
+    this.adapter.releaseSeat(flightCode, seat)
+  }
+
 }
 
 // Singleton pattern used for single source of truth

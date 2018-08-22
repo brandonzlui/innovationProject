@@ -71,6 +71,10 @@ app.factory('FlightData', ($q) => {
       data.flightSeat = newSeat
       data.outgoing = []
       data.incoming = []
+    },
+
+    setAvailable: function(available) {
+      data.plane.available = available
     }
   }
 })

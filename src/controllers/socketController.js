@@ -105,6 +105,19 @@ module.exports = function(io) {
        */
     })
 
+    socket.on('free', data => {
+      const { flightCode, oldSeat, newSeat } = data
+
+      // Changes to OLCI
+      cxData.takeSeat(flightCode, newSeat)
+      cxData.releaseSeat(flightCode, oldSeat)
+      const [_, seatMap] = cxData.getSeatMap(flightCode)
+
+      io.emit(`${flightCode}/${oldSeat}-reset`, newSeat)
+      io.emit(flightCode, seatMap.available)
+      // TODO resubscribe
+    })
+
     socket.on('cancel', data => {
       // TODO
     })

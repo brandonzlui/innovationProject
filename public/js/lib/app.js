@@ -116,6 +116,10 @@ app.factory('FlightData', function ($q) {
       data.flightSeat = newSeat;
       data.outgoing = [];
       data.incoming = [];
+    },
+
+    setAvailable: function setAvailable(available) {
+      data.plane.available = available;
     }
   };
 });

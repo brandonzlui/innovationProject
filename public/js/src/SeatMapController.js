@@ -38,7 +38,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         if (ownSeat == seat) classList.push('me')
   
         html += `
-          <li class="seat ${classList.join(' ')}" id="${seat}">
+          <li class="${classList.join(' ')}" id="${seat}">
             <input type="checkbox" />
             <label for="${seat}">${seat}</label>
           </li>
@@ -58,7 +58,17 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     $(`#${ownSeat} > input`).prop('disabled', true)
   
     // Click listener for AVAILABLE seat
-    $(document).on('click', '.seat.free > label', event => console.log(`Clicked on free seat ${event.target.parentNode.id}`))
+    $(document).on('click', '.seat.free > label', event => {
+      const seatId = event.target.parentNode.id
+      console.log(`Clicked on free seat ${event.target.parentNode.id}`)
+
+      socket.emit('free', {
+        flightCode: flightCode,
+        oldSeat: ownSeat,
+        newSeat: seatId
+      })
+      
+    })
 
     $(".modal").on("hidden.bs.modal", function() {
       $(".modal-body").html("")
@@ -216,16 +226,11 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     })
 
     socket.on(flightCode, available => {
-      // Reset all available seats
-      const oldFrees = document.getElementsByClassName('seat free')
-      for (let i = 0; i < oldFrees.length; ++i) {
-        oldFrees[i].className = 'seat taken'
-      }
-
-      // Loop through and add new availables
-      for (let i = 0; i < available.length; ++i) {
-        available[i].className = 'seat free'
-      }
+      $scope.FlightData.setAvailable(available)
+      $scope.FlightData.get().then(factory => {
+        const { flightCode, flightSeat, plane, outgoing, incoming } = factory
+        setUpSeatMap(plane, incoming, flightSeat)        
+      })
     })
 
     socket.on(`${flightCode}/${flightSeat}-init`, postings => {
@@ -234,14 +239,19 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     })
 
     socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
-      $scope.FlightData.resetToNewSeat(newSeat)
+      console.log('new seat ', newSeat)
       localStorage.setItem('flightSeat', newSeat)
+      $scope.FlightData.resetToNewSeat(newSeat)
+
+      $scope.FlightData.get().then(factory => {
+        const { flightCode, flightSeat, plane, outgoing, incoming } = factory
+
+        // Setup seat map
+        setUpSeatMap(plane, incoming, flightSeat)        
+      })
     })
 
     socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat })
-
-    
-
   })
 
 

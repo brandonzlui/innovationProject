@@ -40,6 +40,7 @@ class MockOLCI {
   }
 
   takeSeat(flightCode, flightSeat) {
+    console.log(flightCode)
     const index = this.seatMaps[flightCode].available.indexOf(flightSeat)
     if (index < 0) return false
 
@@ -66,10 +67,7 @@ class MockOLCI {
         data2 = ref
     })
 
-    if (!data1 || !data2) {
-      console.error(`swap seat error`)
-      return
-    }
+    if (!data1 || !data2) return
 
     const temp = this.bookingData[data2]
     this.bookingData[data2] = this.bookingData[data1]

@@ -41,7 +41,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         if (candidates.has(seat)) classList.push('option');
         if (ownSeat == seat) classList.push('me');
 
-        html += '\n          <li class="seat ' + classList.join(' ') + '" id="' + seat + '">\n            <input type="checkbox" />\n            <label for="' + seat + '">' + seat + '</label>\n          </li>\n        ';
+        html += '\n          <li class="' + classList.join(' ') + '" id="' + seat + '">\n            <input type="checkbox" />\n            <label for="' + seat + '">' + seat + '</label>\n          </li>\n        ';
       }
 
       html += '</ol>';
@@ -58,7 +58,14 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     // Click listener for AVAILABLE seat
     $(document).on('click', '.seat.free > label', function (event) {
-      return console.log('Clicked on free seat ' + event.target.parentNode.id);
+      var seatId = event.target.parentNode.id;
+      console.log('Clicked on free seat ' + event.target.parentNode.id);
+
+      socket.emit('free', {
+        flightCode: flightCode,
+        oldSeat: ownSeat,
+        newSeat: seatId
+      });
     });
 
     $(".modal").on("hidden.bs.modal", function () {
@@ -223,16 +230,16 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     socket.on(flightCode + '/' + flightSeat + '-declined', function (request) {});
 
     socket.on(flightCode, function (available) {
-      // Reset all available seats
-      var oldFrees = document.getElementsByClassName('seat free');
-      for (var i = 0; i < oldFrees.length; ++i) {
-        oldFrees[i].className = 'seat taken';
-      }
+      $scope.FlightData.setAvailable(available);
+      $scope.FlightData.get().then(function (factory) {
+        var flightCode = factory.flightCode,
+            flightSeat = factory.flightSeat,
+            plane = factory.plane,
+            outgoing = factory.outgoing,
+            incoming = factory.incoming;
 
-      // Loop through and add new availables
-      for (var _i = 0; _i < available.length; ++_i) {
-        available[_i].className = 'seat free';
-      }
+        setUpSeatMap(plane, incoming, flightSeat);
+      });
     });
 
     socket.on(flightCode + '/' + flightSeat + '-init', function (postings) {
@@ -263,8 +270,21 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     });
 
     socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
-      $scope.FlightData.resetToNewSeat(newSeat);
+      console.log('new seat ', newSeat);
       localStorage.setItem('flightSeat', newSeat);
+      $scope.FlightData.resetToNewSeat(newSeat);
+
+      $scope.FlightData.get().then(function (factory) {
+        var flightCode = factory.flightCode,
+            flightSeat = factory.flightSeat,
+            plane = factory.plane,
+            outgoing = factory.outgoing,
+            incoming = factory.incoming;
+
+        // Setup seat map
+
+        setUpSeatMap(plane, incoming, flightSeat);
+      });
     });
 
     socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat });

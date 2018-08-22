@@ -20,7 +20,7 @@ const apiRouter = require('./src/routes/api')
 const app = express()
 const server = http.createServer(app)
 const io = require('socket.io')(server)
-const port = process.env.NODE_PORT || 3000
+const port = process.env.PORT || 3000
 
 // ---- Middleware setup ----
 
