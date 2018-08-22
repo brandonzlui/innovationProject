@@ -27,6 +27,9 @@ app.factory('FlightData', function ($q) {
           url: './api/seatMap/' + flightCode,
           method: 'GET',
           success: function success(planeData) {
+            planeData.available = planeData.available.sort(function (x, y) {
+              return x.substring(0, x.length - 1) - y.substring(0, y.length - 1);
+            });
             data = {
               flightCode: flightCode,
               flightSeat: flightSeat,
@@ -197,7 +200,3 @@ app.directive('onFinishRender', function ($timeout) {
     }
   };
 });
-
-/**
- * 
- */

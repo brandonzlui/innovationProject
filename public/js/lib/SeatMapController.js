@@ -37,9 +37,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         var available = plane.available.includes(seat);
 
         var classList = ['seat'];
-        classList.push(available ? 'free' : 'taken');
-        if (candidates.has(seat)) classList.push('option');
-        if (ownSeat == seat) classList.push('me');
+        if (available) classList.push('free');else if (candidates.has(seat)) classList.push('option');else if (ownSeat == seat) classList.push('me');else classList.push('taken');
 
         html += '\n          <li class="' + classList.join(' ') + '" id="' + seat + '">\n            <input type="checkbox" />\n            <label for="' + seat + '">' + seat + '</label>\n          </li>\n        ';
       }
@@ -213,6 +211,52 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $scope.FlightData.addOutgoingRequest(request);
     });
 
+    $(document).off('click', '#requestWindow');
+    $(document).on('click', '#requestWindow', function (event) {
+      console.log('hello');
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = plane.available[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var seat = _step.value;
+
+          if (plane.window.includes(seat.substring(seat.length - 1, seat.length))) {
+            socket.emit('free', {
+              flightCode: flightCode,
+              oldSeat: flightSeat,
+              newSeat: seat
+            });
+
+            $scope.FlightData.resetToNewSeat(seat);
+            return;
+          }
+        }
+
+        // socket.emit('multi-request', {
+        //   flightCode: flightCode,
+        //   fromSeat: flightSeat,
+        //   category: 'window',
+        //   companions: [],
+        //   message: 'Preference for window seat'
+        // })
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    });
+
     socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
       /**
        * 1. update data source
@@ -232,7 +276,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       handleNewRequest(request);
     });
 
-    // TODO
     socket.on(flightCode + '/' + flightSeat + '-accepted', function (request) {
       // Parse request
       var flightCode = request.flightCode,
@@ -279,26 +322,26 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     socket.on(flightCode + '/' + flightSeat + '-init', function (postings) {
       $scope.FlightData.replaceIncomingRequests(postings);
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator = postings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var request = _step.value;
+        for (var _iterator2 = postings[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var request = _step2.value;
           handleNewRequest(request);
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }

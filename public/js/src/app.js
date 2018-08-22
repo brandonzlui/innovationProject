@@ -25,6 +25,7 @@ app.factory('FlightData', ($q) => {
           url: `./api/seatMap/${flightCode}`,
           method: 'GET',
           success: planeData => {
+            planeData.available = planeData.available.sort((x, y) => x.substring(0, x.length - 1) - y.substring(0, y.length - 1))
             data = {
               flightCode: flightCode,
               flightSeat: flightSeat,
@@ -128,7 +129,3 @@ app.directive('onFinishRender', ($timeout) => {
 		}
 	}
 })
-
-/**
- * 
- */

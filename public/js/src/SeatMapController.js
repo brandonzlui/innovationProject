@@ -33,9 +33,10 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         const available = plane.available.includes(seat)
   
         const classList = ['seat']
-        classList.push(available ? 'free' : 'taken')
-        if (candidates.has(seat)) classList.push('option')
-        if (ownSeat == seat) classList.push('me')
+        if (available) classList.push('free')
+        else if (candidates.has(seat)) classList.push('option')
+        else if (ownSeat == seat) classList.push('me')
+        else classList.push('taken')
   
         html += `
           <li class="${classList.join(' ')}" id="${seat}">
@@ -218,13 +219,27 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     $(document).off('click', '#requestWindow')
     $(document).on('click', '#requestWindow', event => {
-      socket.emit('multi-request', {
-        flightCode: flightCode,
-        fromSeat: flightSeat,
-        category: 'window',
-        companions: [],
-        message: ''
-      })
+      console.log('hello')
+      for (let seat of plane.available) {
+        if (plane.window.includes(seat.substring(seat.length - 1, seat.length))) {
+          socket.emit('free', {
+            flightCode: flightCode,
+            oldSeat: flightSeat,
+            newSeat: seat
+          })
+    
+          $scope.FlightData.resetToNewSeat(seat)
+          return
+        }
+      }
+
+      // socket.emit('multi-request', {
+      //   flightCode: flightCode,
+      //   fromSeat: flightSeat,
+      //   category: 'window',
+      //   companions: [],
+      //   message: 'Preference for window seat'
+      // })
     })
 
     socket.on(`${flightCode}/${flightSeat}-request`, request => {
