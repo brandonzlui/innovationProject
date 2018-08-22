@@ -83,6 +83,14 @@ app.factory('FlightData', ($q) => {
         if (request.fromSeat == fromSeat) return request
       }
       return null
+    },
+
+    receivedDecline: function(updatedRequest) {
+      data.outgoing = data.outgoing.filter(req => req.toSeat != updatedRequest.toSeat)
+    },
+
+    sendDecline: function(fromSeat) {
+      data.incoming = data.incoming.filter(req => req.fromSeat != fromSeat)
     }
   }
 })

@@ -152,6 +152,18 @@ app.factory('FlightData', function ($q) {
       }
 
       return null;
+    },
+
+    receivedDecline: function receivedDecline(updatedRequest) {
+      data.outgoing = data.outgoing.filter(function (req) {
+        return req.toSeat != updatedRequest.toSeat;
+      });
+    },
+
+    sendDecline: function sendDecline(fromSeat) {
+      data.incoming = data.incoming.filter(function (req) {
+        return req.fromSeat != fromSeat;
+      });
     }
   };
 });

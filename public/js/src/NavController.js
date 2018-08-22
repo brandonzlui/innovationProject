@@ -1,5 +1,8 @@
+const TIMEOUT = 500
+
 app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'FlightData', ($scope, $http, $state, $rootScope, FlightData) => {
   console.log('NavController loaded!')
+  $scope.curr = 'seatmap'
   $scope.sections = [
     {
       title: 'Seat Map',
@@ -20,8 +23,6 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
     }
   ]
 
-  $scope.curr = 'seatmap'
-
   $scope.changeState = function(stateName) {
     $scope.curr = stateName
     $state.go(stateName)
@@ -29,46 +30,59 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
 
   $scope.FlightData = FlightData
 
-  $scope.FlightData.get().then(data => {
-    const { flightSeat, flightCode, outgoing } = data
-    $scope.sections[2].count = outgoing.length
+  $scope.resetSockets = function() {
+    $scope.FlightData.get().then(data => {
+      const { flightSeat, flightCode, outgoing } = data
+      $scope.sections[2].count = outgoing.length
+  
+      socket.on(`${flightCode}/${flightSeat}-pending`, () => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            const { outgoing } = data
+            $scope.sections[2].count = outgoing.filter(req => req.status == 'Pending').length
+          })
+        }, TIMEOUT)
+      })
+  
+      socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            const { incoming } = data
+            $scope.sections[1].count = incoming.length
+          })
+        }, TIMEOUT)
+      })
+  
+      socket.on(`${flightCode}/${flightSeat}-init`, postings => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            const { incoming } = data
+            $scope.sections[1].count = incoming.length
+          })
+        }, TIMEOUT)
+      })
+  
+      socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            const { incoming, outgoing } = data
+            $scope.sections[1].count = incoming.length
+            $scope.sections[2].count = outgoing.length
+          })
+        }, TIMEOUT)
+      })
 
-    socket.on(`${flightCode}/${flightSeat}-pending`, () => {
-      setTimeout(() => {
-        $scope.FlightData.get().then(data => {
-          const { outgoing } = data
-          $scope.sections[2].count = outgoing.filter(req => req.status == 'Pending').length
-        })
-      }, 500)
+      socket.on(`${flightCode}/${flightSeat}-accepted`, seat => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            const { incoming, outgoing } = data
+            $scope.sections[1].count = incoming.length
+            $scope.sections[2].count = outgoing.length
+          })
+        }, TIMEOUT)
+      })
     })
+  }
 
-    socket.on(`${flightCode}/${flightSeat}-request`, request => {
-      setTimeout(() => {
-        $scope.FlightData.get().then(data => {
-          const { incoming } = data
-          $scope.sections[1].count = incoming.length
-        })
-      }, 500)
-    })
-
-    socket.on(`${flightCode}/${flightSeat}-init`, postings => {
-      setTimeout(() => {
-        $scope.FlightData.get().then(data => {
-          const { incoming } = data
-          $scope.sections[1].count = incoming.length
-        })
-      }, 500)
-    })
-
-    socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
-      setTimeout(() => {
-        $scope.FlightData.get().then(data => {
-          const { incoming, outgoing } = data
-          $scope.sections[1].count = incoming.length
-          $scope.sections[2].count = outgoing.length
-        })
-      }, 500)
-    })
-  })
-
+  $scope.resetSockets()
 }])

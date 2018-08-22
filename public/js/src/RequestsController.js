@@ -3,16 +3,40 @@ app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope',
   $scope.FlightData = FlightData
   $scope.myRequests = []
 
-  $scope.FlightData.get().then(data => {
-    const { flightCode, flightSeat, outgoing } = data
+  $scope.resetSockets = function() {
+    $scope.FlightData.get().then(data => {
+      const { flightCode, flightSeat, outgoing } = data
+      $scope.myRequests = outgoing
 
-    $scope.myRequests = outgoing
+      socket.on(`${flightCode}/${flightSeat}-pending`, request => {
+        $scope.FlightData.get().then(data => {
+          $scope.myRequests = data.outgoing
+        })
+      })
+  
+      socket.on(`${flightCode}/${flightSeat}-accepted`, updatedRequest => {
+        // Reset seat map
+        if (updatedRequest.isSingle) {
+          $scope.FlightData.resetToNewSeat(updatedRequest.toSeat)
+        }
 
-    // socket.on(`${flightCode}/${flightSeat}-pending`, pending => {
-    //   // Add pending
-    //   console.log(`ADDING request ${pending.created}`)
-    //   $scope.FlightData.addOutgoingRequest(pending)
-    //   $scope.myRequests = [pending].concat($scope.myRequests)
-    // })
-  })  
+        $scope.resetSockets()
+      })
+
+      socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        setTimeout(() => $scope.resetSockets(), 500)
+      })
+
+      socket.on(`${flightCode}/${flightSeat}-declined`, updatedRequest => {
+        // Change status
+        $scope.FlightData.receivedDecline(updatedRequest)
+        $scope.FlightData.get().then(data => {
+          $scope.myRequests = data.outgoing
+        })
+      })
+    })  
+  }
+
+  $scope.resetSockets()
+
 }])

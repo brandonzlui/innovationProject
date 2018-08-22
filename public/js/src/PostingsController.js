@@ -6,29 +6,34 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
     updateButtonListeners()
   })
 
-  $scope.FlightData.get().then(flightData => {
-    const { flightCode, flightSeat, incoming } = flightData
-    $scope.requests = incoming
-    updateButtonListeners()
-
-    socket.on(`${flightCode}/${flightSeat}-request`, request => {
-      $scope.FlightData.addIncomingRequest(request)
-      $scope.FlightData.get().then(data => {
-        $scope.requests = data.incoming
-        updateButtonListeners()
+  $scope.resetSockets = function() {
+    $scope.FlightData.get().then(flightData => {
+      const { flightCode, flightSeat, incoming } = flightData
+      $scope.requests = incoming
+      updateButtonListeners()
+  
+      socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        $scope.FlightData.addIncomingRequest(request)
+        $('#newRequestSpan').html(request.fromSeat)
+        $('#newRequestModal').modal('show')
+        $scope.FlightData.get().then(data => {
+          $scope.requests = data.incoming
+          updateButtonListeners()
+        })
+      })
+  
+      socket.on(`${flightCode}/${flightSeat}-pending`, request => {
+        $scope.FlightData.addOutgoingRequest(request)
+      }) 
+  
+      socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        $scope.FlightData.resetToNewSeat(newSeat)
+        $scope.resetSockets()
       })
     })
+  }
 
-    socket.on(`${flightCode}/${flightSeat}-pending`, request => {
-      $scope.FlightData.addOutgoingRequest(request)
-    }) 
-
-    socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
-      $scope.FlightData.resetToNewSeat(newSeat)
-
-      setTimeout(() => $state.go('seatmap'), 2000)
-    })
-  })
+  $scope.resetSockets()
 
   function updateButtonListeners() {
     // Remove previous event listeners
@@ -40,8 +45,12 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
       acceptButtons[i].addEventListener('click', event => {
         const id = event.target.id
         const request = JSON.parse(id.substring(0, id.length - 2))
+        $(`#respondModal-${request.fromSeat}-${request.toSeat}`).modal('hide')
         
-        socket.emit('accept', request)
+        setTimeout(() => {
+          socket.emit('accept', request)
+          $scope.resetSockets()
+        }, 500)
       })
     }
   }
