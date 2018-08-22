@@ -27,15 +27,42 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
   $scope.FlightData = FlightData
 
   $scope.FlightData.get().then(data => {
-    const { flightSeat, flightCode, pending } = data
-    $scope.sections[2].count = pending.length
+    const { flightSeat, flightCode, outgoing } = data
+    $scope.sections[2].count = outgoing.length
 
     socket.on(`${flightCode}/${flightSeat}-pending`, () => {
       setTimeout(() => {
         $scope.FlightData.get().then(data => {
           const { outgoing } = data
           $scope.sections[2].count = outgoing.filter(req => req.status == 'Pending').length
-          $scope.$apply()
+        })
+      }, 500)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-request`, request => {
+      setTimeout(() => {
+        $scope.FlightData.get().then(data => {
+          const { incoming } = data
+          $scope.sections[1].count = incoming.length
+        })
+      }, 500)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-init`, postings => {
+      setTimeout(() => {
+        $scope.FlightData.get().then(data => {
+          const { incoming } = data
+          $scope.sections[1].count = incoming.length
+        })
+      }, 500)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+      setTimeout(() => {
+        $scope.FlightData.get().then(data => {
+          const { incoming, outgoing } = data
+          $scope.sections[1].count = incoming.length
+          $scope.sections[2].count = outgoing.length
         })
       }, 500)
     })

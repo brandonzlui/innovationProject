@@ -32,8 +32,7 @@ app.factory('FlightData', function ($q) {
               flightSeat: flightSeat,
               plane: planeData,
               outgoing: [],
-              incoming: [],
-              pending: []
+              incoming: []
             };
 
             deferred.resolve(data);
@@ -48,19 +47,15 @@ app.factory('FlightData', function ($q) {
     },
 
     addIncomingRequest: function addIncomingRequest(request) {
-      data.incoming.push(request);
-    },
-
-    addOutgoingRequest: function addOutgoingRequest(request) {
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = data.outgoing[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = data.incoming[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var entry = _step.value;
 
-          if (entry.created == request.created && entry.toSeat == request.toSeat) return;
+          if (entry.created == request.created && entry.fromSeat == request.fromSeat) reutrn;
         }
       } catch (err) {
         _didIteratorError = true;
@@ -77,6 +72,35 @@ app.factory('FlightData', function ($q) {
         }
       }
 
+      data.incoming.push(request);
+    },
+
+    addOutgoingRequest: function addOutgoingRequest(request) {
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = data.outgoing[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var entry = _step2.value;
+
+          if (entry.created == request.created && entry.toSeat == request.toSeat) return;
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
       data.outgoing.push(request);
     },
 
@@ -86,6 +110,12 @@ app.factory('FlightData', function ($q) {
 
     replaceIncomingRequests: function replaceIncomingRequests(incoming) {
       data.incoming = incoming;
+    },
+
+    resetToNewSeat: function resetToNewSeat(newSeat) {
+      data.flightSeat = newSeat;
+      data.outgoing = [];
+      data.incoming = [];
     }
   };
 });
@@ -120,3 +150,21 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 
   $urlRouterProvider.otherwise('/');
 }]);
+
+// ng-repeat-finished directive
+app.directive('onFinishRender', function ($timeout) {
+  return {
+    restrict: 'A',
+    link: function link(scope, element, attr) {
+      if (scope.$last === true) {
+        $timeout(function () {
+          return scope.$emit('ngRepeatFinished');
+        });
+      }
+    }
+  };
+});
+
+/**
+ * 
+ */

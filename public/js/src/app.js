@@ -30,8 +30,7 @@ app.factory('FlightData', ($q) => {
               flightSeat: flightSeat,
               plane: planeData,
               outgoing: [],
-              incoming: [],
-              pending: []
+              incoming: []
             }
 
             deferred.resolve(data)
@@ -46,6 +45,9 @@ app.factory('FlightData', ($q) => {
     },
 
     addIncomingRequest: function(request) {
+      for (let entry of data.incoming) {
+        if (entry.created == request.created && entry.fromSeat == request.fromSeat) reutrn
+      }
       data.incoming.push(request)
     },
 
@@ -63,6 +65,12 @@ app.factory('FlightData', ($q) => {
 
     replaceIncomingRequests: function(incoming) {
       data.incoming = incoming
+    },
+
+    resetToNewSeat: function(newSeat) {
+      data.flightSeat = newSeat
+      data.outgoing = []
+      data.incoming = []
     }
   }
 })
@@ -97,3 +105,19 @@ app.config(['$stateProvider', '$urlRouterProvider', ($stateProvider, $urlRouterP
 
   $urlRouterProvider.otherwise('/')
 }])
+
+// ng-repeat-finished directive
+app.directive('onFinishRender', ($timeout) => {
+	return {
+		restrict: 'A',
+		link: (scope, element, attr) => {
+			if (scope.$last === true) {
+				$timeout(() => scope.$emit('ngRepeatFinished'))
+			}
+		}
+	}
+})
+
+/**
+ * 
+ */

@@ -55,6 +55,27 @@ class MockOLCI {
     return true
   }
 
+  swapSeats(flightCode, fromSeat, toSeat) {
+    // Find booking data
+    let data1 = null
+    let data2 = null
+    Object.keys(this.bookingData).forEach(ref => {
+      if (this.bookingData[ref].flightCode == flightCode && this.bookingData[ref].flightSeat == fromSeat)
+        data1 = ref
+        if (this.bookingData[ref].flightCode == flightCode && this.bookingData[ref].flightSeat == toSeat)
+        data2 = ref
+    })
+
+    if (!data1 || !data2) {
+      console.error(`swap seat error`)
+      return
+    }
+
+    const temp = this.bookingData[data2]
+    this.bookingData[data2] = this.bookingData[data1]
+    this.bookingData[data1] = temp
+  }
+
 }
 
 module.exports = MockOLCI

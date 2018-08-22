@@ -26,6 +26,7 @@ module.exports = function(io) {
       socket.join(`${flightCode}/${flightSeat}-pending`)                      // use for NEW pending
       socket.join(`${flightCode}/${flightSeat}-accepted`)                     // use for NEW accepted
       socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
+      socket.join(`${flightCode}/${flightSeat}-reset`)
     })
 
     socket.on('fetch', data => {
@@ -77,6 +78,23 @@ module.exports = function(io) {
        * 2. backend update source of truth through DataSource
        * 3. publish same request to channels (frontend handle rendering)
        */
+      // Parse request
+      const { created, flightCode, fromSeat, toSeat, isSingle, companions, message } = data
+      console.log(`${toSeat} accepted request from ${fromSeat} created on ${created}`)
+
+      const request = new SwapRequest(flightCode, fromSeat, companions, message)
+      if (isSingle) request.setSingleSwap(toSeat)
+      const updatedRequest = cxData.acceptRequest(request, created)
+      if (!updatedRequest) {
+        console.error('cannot find!!!')
+        return
+      }
+
+      // Tell creator that it has been accepted
+      io.emit(`${flightCode}/${fromSeat}-accepted`, updatedRequest)
+
+      // Tell whoever accepted to reset their map
+      io.emit(`${flightCode}/${toSeat}-reset`, fromSeat)
     })
 
     socket.on('decline', data => {

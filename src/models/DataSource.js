@@ -26,11 +26,26 @@ class DataSource {
     this.requests.push(request)
   }
 
-  acceptRequest(request) {
+  acceptRequest(target, created) {
     /**
      * 1. find request in 'library'
      * 2. make change to CX Adapter to update the seatmap
      */
+    for (let i in this.requests) {
+      const request = this.requests[i]
+      console.log(`${new Date(request.created)} vs ${new Date(created)} == ${new Date(request.created).getTime() == new Date(created).getTime()}`)
+      console.log(`${request.fromSeat} vs ${target.fromSeat}`)
+      console.log(`${request.toSeat} vs ${target.toSeat}`)
+      
+      if (new Date(request.created).getTime() == new Date(created).getTime() && request.fromSeat == target.fromSeat && request.toSeat == target.toSeat) {
+        // TODO Inform OLCI
+        this.adapter.swapSeats(target.flightCode, target.fromSeat, target.toSeat)
+        this.requests[i].status = 'Accepted'
+        return this.requests[i]
+      }
+    }
+
+    return null
   }
 
   declineRequest(request) {

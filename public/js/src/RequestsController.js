@@ -6,7 +6,6 @@ app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope',
   $scope.FlightData.get().then(data => {
     const { flightCode, flightSeat, outgoing } = data
 
-    console.log(`[requestCtrl] refreshed data`)
     $scope.myRequests = outgoing
 
     // socket.on(`${flightCode}/${flightSeat}-pending`, pending => {

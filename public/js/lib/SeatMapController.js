@@ -193,7 +193,31 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     });
 
     // TODO
-    socket.on(flightCode + '/' + flightSeat + '-accepted', function (request) {});
+    socket.on(flightCode + '/' + flightSeat + '-accepted', function (request) {
+      // Parse request
+      var flightCode = request.flightCode,
+          fromSeat = request.fromSeat,
+          toSeat = request.toSeat,
+          isSingle = request.isSingle,
+          companions = request.companions,
+          message = request.message;
+
+      console.log('accepted change to new seat ' + toSeat);
+
+      localStorage.setItem('flightSeat', toSeat);
+
+      // Update data source
+      $scope.FlightData.resetToNewSeat(toSeat);
+      $scope.FlightData.get().then(function (factory) {
+        var flightCode = factory.flightCode,
+            flightSeat = factory.flightSeat,
+            plane = factory.plane,
+            outgoing = factory.outgoing,
+            incoming = factory.incoming;
+
+        setUpSeatMap(plane, incoming, flightSeat);
+      });
+    });
 
     // TODO
     socket.on(flightCode + '/' + flightSeat + '-declined', function (request) {});
@@ -236,6 +260,11 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
           }
         }
       }
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
+      $scope.FlightData.resetToNewSeat(newSeat);
+      localStorage.setItem('flightSeat', newSeat);
     });
 
     socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat });

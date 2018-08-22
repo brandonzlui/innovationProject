@@ -1,5 +1,9 @@
 <h1 class="page-title">Requests</h1>
 
+<div class="alert alert-warning vs2" ng-if="myRequests.length == 0" role="alert">  
+  <h4 class="alert-heading">No pending requests</h4>
+  <p>You can submit a seat swap request using the Seat Map.</p>
+</div>
 
 <div class="list-group vs2" ng-repeat="request in myRequests">
   <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">

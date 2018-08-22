@@ -27,9 +27,9 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
   $scope.FlightData.get().then(function (data) {
     var flightSeat = data.flightSeat,
         flightCode = data.flightCode,
-        pending = data.pending;
+        outgoing = data.outgoing;
 
-    $scope.sections[2].count = pending.length;
+    $scope.sections[2].count = outgoing.length;
 
     socket.on(flightCode + '/' + flightSeat + '-pending', function () {
       setTimeout(function () {
@@ -39,7 +39,38 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
           $scope.sections[2].count = outgoing.filter(function (req) {
             return req.status == 'Pending';
           }).length;
-          $scope.$apply();
+        });
+      }, 500);
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
+      setTimeout(function () {
+        $scope.FlightData.get().then(function (data) {
+          var incoming = data.incoming;
+
+          $scope.sections[1].count = incoming.length;
+        });
+      }, 500);
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-init', function (postings) {
+      setTimeout(function () {
+        $scope.FlightData.get().then(function (data) {
+          var incoming = data.incoming;
+
+          $scope.sections[1].count = incoming.length;
+        });
+      }, 500);
+    });
+
+    socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
+      setTimeout(function () {
+        $scope.FlightData.get().then(function (data) {
+          var incoming = data.incoming,
+              outgoing = data.outgoing;
+
+          $scope.sections[1].count = incoming.length;
+          $scope.sections[2].count = outgoing.length;
         });
       }, 500);
     });

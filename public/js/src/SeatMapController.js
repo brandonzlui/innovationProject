@@ -196,7 +196,18 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
     // TODO
     socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
-      
+      // Parse request
+      const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
+      console.log(`accepted change to new seat ${toSeat}`)
+
+      localStorage.setItem('flightSeat', toSeat)
+
+      // Update data source
+      $scope.FlightData.resetToNewSeat(toSeat)
+      $scope.FlightData.get().then(factory => {
+        const { flightCode, flightSeat, plane, outgoing, incoming } = factory
+        setUpSeatMap(plane, incoming, flightSeat)
+      })
     })
 
     // TODO
@@ -222,8 +233,17 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       for (let request of postings) handleNewRequest(request)
     })
 
+    socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+      $scope.FlightData.resetToNewSeat(newSeat)
+      localStorage.setItem('flightSeat', newSeat)
+    })
+
     socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat })
+
+    
+
   })
+
 
   function handleNewRequest(request) {
     const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request

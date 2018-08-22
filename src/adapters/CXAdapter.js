@@ -31,6 +31,10 @@ class CXAdapter {
     return [null, seatMap]
   }
 
+  swapSeats(flightCode, fromSeat, toSeat) {
+    this.cxDataSource.swapSeats(flightCode, fromSeat, toSeat)
+  }
+
 }
 
 module.exports = CXAdapter
