@@ -20,7 +20,10 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
     }
   ]
 
+  $scope.curr = 'seatmap'
+
   $scope.changeState = function(stateName) {
+    $scope.curr = stateName
     $state.go(stateName)
   }
 

@@ -56,7 +56,7 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul ng-cloak class="navbar-nav nav text-md-center justify-content-md-around">
           <li ng-repeat="section in sections" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-            <a href="#" class="nav-link" ng-click="changeState(section.stateName)">
+            <a href="#" class="nav-link" ng-click="changeState(section.stateName)" ng-class="{ active: section.stateName == curr }">
               <span class="link-text">{{section.title}} 
                 <span class="badge badge-pill badge-primary">{{section.hasBadge && section.count > 0 ? section.count : ''}}</span>
               </span>
