@@ -39,6 +39,15 @@ html {
   text-align:center;
 }
 
+.other-page-title {
+  margin-top:20px;
+  text-align:center;
+}
+
+.no-postings {
+  padding-top:20px !important;
+}
+
 .wrapper{
   text-align: center;
 }
@@ -437,8 +446,9 @@ ol {
     margin:9rem auto;
   }
 }
-@media screen and (max-width:990){
-  .page-title{
-    margin: 5rem;
+@media screen and (max-width:990px){
+  .other-page-title {
+    text-align:center;
+    padding-top:60px;
   }
 }
