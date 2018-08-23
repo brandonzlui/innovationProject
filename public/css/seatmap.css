@@ -9,3 +9,9 @@
 .seat.option label {
   background: orange;
 }
+
+.jumbotron{
+  background-image: url("/assets/images/plane_banner.jpg");
+  background-size: cover;
+	padding-bottom: 100px;
+}

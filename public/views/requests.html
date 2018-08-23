@@ -1,5 +1,7 @@
 <h1 class="page-title">My Requests</h1>
 
+<div class ="container">
+
 <div class="alert alert-warning vs2" ng-if="myRequests.length == 0" role="alert">  
   <h4 class="alert-heading">No pending requests</h4>
   <p>You can submit a seat swap request using the Seat Map.</p>
@@ -12,6 +14,32 @@
       <small></small>
     </div>
     <p class="mb-1">Status: {{request.status}}</p>
-    <small>Message: {{request.message}}</small>
+    <p class="mb-1">Message: {{request.message}}</p>
   </a>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-window" > <!--data-target="#respondModal-{{request.fromSeat}}-{{request.toSeat}}"> -->
+    Cancel Request
+  </button>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modal-window" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Seat Swap</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <hr align="center" width="95%">
+        <div class="modal-body" id="respondBody">
+          Are you sure you want to cancel your request to change to {{request.toSeat}}?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary declineBtn" id="{{request}}-2" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary acceptBtn" id="{{request}}-1" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -271,6 +271,49 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
             flightCode: flightCode,
             flightSeat: flightSeat
           })
+    
+          $scope.FlightData.resetToNewSeat(seat)
+          // TODO Inssert you have changed seat modal (aacepted window swap modal)
+
+          return
+        }
+      
+
+      // socket.emit('multi-request', {
+      //   flightCode: flightCode,
+      //   fromSeat: flightSeat,
+      //   category: 'window',
+      //   companions: [],
+      //   message: 'Preference for window seat'
+      // })
+    )
+
+    socket.on(`${flightCode}/${flightSeat}-request`, request => {
+      /**
+       * 1. update data source
+       * 2. seat map needs to reflect change
+       */
+
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    socket.on(`${flightCode}/aisle`, request => {
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    socket.on(`${flightCode}/window`, request => {
+      $scope.FlightData.addIncomingRequest(request)
+      handleNewRequest(request)
+    })
+
+    socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
+      // Parse request
+      const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
+      console.log(`accepted change to new seat ${toSeat}`)
+
+      localStorage.setItem('flightSeat', toSeat)
 
           $scope.resetSockets()
         })

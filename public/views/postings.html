@@ -1,5 +1,7 @@
 <h1 class="page-title">Postings</h1>
 
+<div class ="container">
+
 <div class="alert alert-warning vs2" ng-if="requests.length == 0" role="alert">  
   <h4 class="alert-heading">No relevant postings</h4>
   <p>There are no requests relevant to your current seat at the moment.</p>
@@ -12,7 +14,7 @@
       <small></small>
     </div>
     <p class="mb-1">Companions: {{request.companions}}</p>
-    <small>Message: {{request.message}}</small>
+    <p class="mb-1">Message: {{request.message}}</p>
   </a>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#respondModal-{{request.fromSeat}}-{{request.toSeat}}">
     Respond
@@ -39,4 +41,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

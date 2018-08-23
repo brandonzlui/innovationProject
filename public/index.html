@@ -24,7 +24,7 @@
 
 </head>
 
-<body data-spy="scroll" data-target=".navbar" data-offset="60">
+<body data-spy="scroll" data-target=".navbar" data-offset="60" style="overflow-x:hidden">
   
   <div ng-controller="NavController">
     <!-- Small Bar -->
@@ -89,12 +89,12 @@
 </div>
 
 
-  <div class="container">
+
     <ui-view></ui-view>
-  </div>
+
 
   <!-- Logo footer -->
-  <div class="container cathay-logo-footer">
+  <div class="container cathay-logo-footer" style="background-color:white;">
     <br>
     <div class="row justify-content-center teamderspace">
       <div class="col-5 col-sm-4 col-md-3">
@@ -139,7 +139,7 @@
   <script src="./lib/js/socket.io.js"></script>
   <script>
     const socket = io();
-    $("#index-loading").animate({opacity:0}, 1500, function(){
+    $("#index-loading").animate({opacity:0}, 2000, function(){
     $("#index-loading").hide();
     });
   </script>
