@@ -71,9 +71,9 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       })
       $('#newSeat').remove()
       $('#modal-swapped').modal('show')
-      $('#modal-body-swapped').prepend(
-        `<span id="newSeat"> ${seatId} </span>`
-      )
+      //$('#modal-body-swapped').prepend(
+      //  `<span id=""> ${seatId} </span>`
+      //)
       $scope.FlightData.resetToNewSeat(seatId)
     })
 
@@ -218,11 +218,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
               oldSeat: flightSeat,
               newSeat: seat
             })
-
-            $('#modal-swapped').modal('show')
-            $('#modal-body-swapped').prepend(
-              `<span> ${seat} </span>`
-            )
       
             $scope.FlightData.resetToNewSeat(seat)
   
@@ -232,7 +227,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
               flightSeat: seat
             })
 
-           $('#newSeat').remove()
+            $('#newSeat').remove()
             $('#modal-body-swapped').prepend(
               `<span id="newSeat"> ${seat} </span>`
             )
