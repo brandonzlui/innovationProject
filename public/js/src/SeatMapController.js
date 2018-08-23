@@ -69,16 +69,21 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         oldSeat: ownSeat,
         newSeat: seatId
       })
+      $('#newSeat').remove()
       $('#modal-swapped').modal('show')
       $('#modal-body-swapped').prepend(
-        `<span> ${seatId} </span>`
+        `<span id="newSeat"> ${seatId} </span>`
       )
       $scope.FlightData.resetToNewSeat(seatId)
     })
 
     $(".modal").on("hidden.bs.modal", function() {
-      $(".modal-body").html("")
+      if ($('modal-body').id() == 'modal-body-swapped')
+        console.log("hello123123")
+        $(".modal-body").html("")
     })
+
+
 
     $(document).on('click', '.seat.option > label', event => {
       const toSeat = event.target.parentNode.id
@@ -226,7 +231,12 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
               flightCode: flightCode,
               flightSeat: seat
             })
-            
+
+           $('#newSeat').remove()
+            $('#modal-body-swapped').prepend(
+              `<span id="newSeat"> ${seat} </span>`
+            )
+            $('#modal-swapped').modal('show')
             return
           }
         }

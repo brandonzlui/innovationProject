@@ -71,6 +71,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
     });
 
     $(".modal").on("hidden.bs.modal", function () {
+      if ($('modal-body').id() == 'modal-body-swapped') console.log("hello123123");
       $(".modal-body").html("");
     });
 
@@ -224,6 +225,12 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
                 flightSeat: _seat2
               });
 
+<<<<<<< HEAD
+=======
+              $('#newSeat').remove();
+              $('#modal-body-swapped').prepend('<span id="newSeat"> ' + _seat2 + ' </span>');
+              $('#modal-swapped').modal('show');
+>>>>>>> origin/angularise
               return;
             }
           }
