@@ -13,12 +13,6 @@ app.controller('RequestsController', ['$scope', '$http', '$state', '$rootScope',
 
       $scope.myRequests = outgoing;
 
-      // socket.on(`${flightCode}/${flightSeat}-request`, request => {
-      //   console.log(request.fromSeat)
-      //   $('#newRequestSpan').html(request.fromSeat)
-      //   $('#newRequestModal').modal('show')
-      // })
-
       socket.on(flightCode + '/' + flightSeat + '-pending', function (request) {
         $scope.FlightData.get().then(function (data) {
           $scope.myRequests = data.outgoing;

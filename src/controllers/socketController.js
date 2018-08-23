@@ -144,7 +144,7 @@ module.exports = function(io) {
       io.emit(`${flightCode}/${oldSeat}-reset`, newSeat)
       io.emit(flightCode, seatMap.available)
 
-      unsubscribe(socket, flightCode, oldSeat)
+      unsubscribe(socket, flightCode, oldSeat, seatMap)
     })
 
     socket.on('cancel', data => {
