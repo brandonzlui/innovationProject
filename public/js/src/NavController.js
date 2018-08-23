@@ -81,6 +81,14 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
           })
         }, TIMEOUT)
       })
+
+      socket.on(`${flightCode}/${flightSeat}-cancelled`, request => {
+        setTimeout(() => {
+          $scope.FlightData.get().then(data => {
+            $scope.sections[1].count = data.incoming.length
+          })
+        }, TIMEOUT)
+      })
     })
   }
 

@@ -91,6 +91,10 @@ app.factory('FlightData', ($q) => {
 
     sendDecline: function(fromSeat) {
       data.incoming = data.incoming.filter(req => req.fromSeat != fromSeat)
+    },
+
+    receivedCancel: function(fromSeat) {
+      data.incoming = data.incoming.filter(req => req.fromSeat != fromSeat)
     }
   }
 })

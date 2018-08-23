@@ -27,6 +27,7 @@ module.exports = function(io) {
       socket.join(`${flightCode}/${flightSeat}-accepted`)                     // use for NEW accepted
       socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
       socket.join(`${flightCode}/${flightSeat}-reset`)
+      socket.join(`${flightCode}/${flightSeat}-cancelled`)
     })
 
     socket.on('fetch', data => {
@@ -148,7 +149,15 @@ module.exports = function(io) {
     })
 
     socket.on('cancel', data => {
-      // TODO
+      const { created, flightCode, fromSeat, toSeat, isSingle, companions, message } = data
+      const request = new SwapRequest(flightCode, fromSeat, companions, message)
+      if (isSingle) request.setSingleSwap(toSeat)
+
+      // Data source update
+      const updatedRequest = cxData.cancelRequest(request, created)
+
+      // Tell toSeat that request has been cancelled
+      io.emit(`${flightCode}/${toSeat}-cancelled`, updatedRequest)
     })
   })
 }
@@ -159,6 +168,7 @@ function unsubscribe(socket, flightCode, flightSeat, seatMap) {
   socket.leave(`${flightCode}/${flightSeat}-accepted`)
   socket.leave(`${flightCode}/${flightSeat}-declined`)
   socket.leave(`${flightCode}/${flightSeat}-reset`)
+  socket.leave(`${flightCode}/${flightSeat}-cancelled`)
 
   const col = flightSeat.slice(-1)
   if (seatMap.aisle.includes(col)) socket.leave(`${flightCode}/aisle`)

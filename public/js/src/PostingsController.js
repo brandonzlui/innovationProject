@@ -30,6 +30,14 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
         $scope.FlightData.resetToNewSeat(newSeat)
         $scope.resetSockets()
       })
+
+      socket.on(`${flightCode}/${flightSeat}-cancelled`, request => {
+        $scope.FlightData.receivedCancel(request)
+        $scope.FlightData.get().then(data => {
+          $scope.requests = data.incoming
+          updateButtonListeners()
+        })
+      })
     })
   }
 
