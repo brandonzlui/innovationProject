@@ -122,7 +122,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $(document).on('click', '#modalAccept', event => {
         console.log(`emitting request`)
         console.log(request)
-        socket.emit('accept', request)
+        socket.emit('accept', request) 
 
         $('#modal-accept').modal('hide')
       })
@@ -170,8 +170,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $("#companion1").removeAttr("href");
       $("#companion1").prepend(`<span>10B</span>`);
       $("#companion1").off();
-      $("#companion2").prepend(`<span>Click here to add a companion.</span>`);
-      
+      $("#companion2").prepend(`<span>Click here to add a companion.</span>`);      
     }
 
     function showSecondCompanion(){
@@ -188,7 +187,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         flightCode: flightCode,
         fromSeat: ownSeat,
         toSeat: seat,
-        companions: [],
+        companions: ['10B', '9B'],
         message: $('#swapMessage').val()
       }
   
@@ -197,6 +196,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
   }
 
   $scope.resetSockets = function() {
+    let active = true
     $scope.FlightData.get().then(factory => {
       const { flightCode, flightSeat, plane, outgoing, incoming } = factory
   
@@ -205,6 +205,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
   
       // ---- Socket handlers ----- //
       socket.on(`${flightCode}/${flightSeat}-pending`, request => {
+        if (!active) return
         $scope.FlightData.addOutgoingRequest(request)
       })
   
@@ -224,19 +225,17 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
               `<span> ${seat} </span>`
             )
       
-            $scope.FlightData.resetToNewSeat(seat)
-  
-            // Change channel
-            socket.emit('create', {
-              flightCode: flightCode,
-              flightSeat: seat
-            })
+            $scope.FlightData.resetToNewSeat(seat) 
 
            $('#newSeat').remove()
             $('#modal-body-swapped').prepend(
               `<span id="newSeat"> ${seat} </span>`
             )
             $('#modal-swapped').modal('show')
+
+            // // Change channel
+            // active = false
+            // $scope.resetSockets()
             return
           }
         }
@@ -251,21 +250,26 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       })
   
       socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        if (!active) return
         $scope.FlightData.addIncomingRequest(request)
         handleNewRequest(request)
       })
   
       socket.on(`${flightCode}/aisle`, request => {
+        if (!active) return
         $scope.FlightData.addIncomingRequest(request)
         handleNewRequest(request)
       })
   
       socket.on(`${flightCode}/window`, request => {
+        if (!active) return
         $scope.FlightData.addIncomingRequest(request)
         handleNewRequest(request)
       })
   
       socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
+        if (!active) return
+
         // Parse request
         const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
         console.log(`accepted change to new seat ${toSeat}`)
@@ -275,7 +279,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         // Unsubscribe
         socket.emit('unsubscribe', {
           flightCode: flightCode,
-          flightSeat: flightSeat
+          flightSeat: fromSeat
         })
   
         // Update data source
@@ -289,53 +293,46 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
             flightCode: flightCode,
             flightSeat: flightSeat
           })
-    
-          $scope.FlightData.resetToNewSeat(seat)
           // TODO Inssert you have changed seat modal 
 
           return
-        }
-      
-
-      // socket.emit('multi-request', {
-      //   flightCode: flightCode,
-      //   fromSeat: flightSeat,
-      //   category: 'window',
-      //   companions: [],
-      //   message: 'Preference for window seat'
-      // })
-    )
-
-    socket.on(`${flightCode}/${flightSeat}-request`, request => {
-      /**
-       * 1. update data source
-       * 2. seat map needs to reflect change
-       */
-
-      $scope.FlightData.addIncomingRequest(request)
-      handleNewRequest(request)
-    })
-
-    socket.on(`${flightCode}/aisle`, request => {
-      $scope.FlightData.addIncomingRequest(request)
-      handleNewRequest(request)
-    })
-
-    socket.on(`${flightCode}/window`, request => {
-      $scope.FlightData.addIncomingRequest(request)
-      handleNewRequest(request)
-    })
-
-    socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
-      // Parse request
-      const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
-      console.log(`accepted change to new seat ${toSeat}`)
-
-      localStorage.setItem('flightSeat', toSeat)
-
-          $scope.resetSockets()
         })
       })
+    
+
+      socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        /**
+         * 1. update data source
+         * 2. seat map needs to reflect change
+         */
+        if (!active) return
+        $scope.FlightData.addIncomingRequest(request)
+        handleNewRequest(request)
+      })
+
+      socket.on(`${flightCode}/aisle`, request => {
+        if (!active) return
+        $scope.FlightData.addIncomingRequest(request)
+        handleNewRequest(request)
+      })
+
+      socket.on(`${flightCode}/window`, request => {
+        if (!active) return
+        $scope.FlightData.addIncomingRequest(request)
+        handleNewRequest(request)
+      })
+
+      socket.on(`${flightCode}/${flightSeat}-accepted`, request => {
+        if (!active) return
+
+        // Parse request
+        const { flightCode, fromSeat, toSeat, isSingle, companions, message } = request
+        console.log(`accepted change to new seat ${toSeat}`)
+
+        localStorage.setItem('flightSeat', toSeat)
+        active = false
+        $scope.resetSockets()
+      }) 
   
       // YOUR request has been declined
       socket.on(`${flightCode}/${flightSeat}-declined`, request => {
@@ -343,21 +340,27 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       })
   
       socket.on(flightCode, available => {
+        if (!active) return
         console.log('got new seat map with new available set')
         console.log(available)
         $scope.FlightData.setAvailable(available)
         $scope.FlightData.get().then(factory => {
           const { flightCode, flightSeat, plane, outgoing, incoming } = factory
+          console.log(`my seat: ${flightSeat}`)
           setUpSeatMap(plane, incoming, flightSeat) 
         })
       })
   
       socket.on(`${flightCode}/${flightSeat}-init`, postings => {
+        if (!active) return
         $scope.FlightData.replaceIncomingRequests(postings)
         for (let request of postings) handleNewRequest(request)
       })
   
       socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        if (!active) return
+
+        console.log(`${socket.id} reset to ${newSeat}`)
         localStorage.setItem('flightSeat', newSeat)
         $scope.FlightData.resetToNewSeat(newSeat)
   
@@ -371,6 +374,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
             flightSeat: flightSeat
           })
 
+          active = false
           $scope.resetSockets()
         })
       })
@@ -378,10 +382,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       socket.emit('fetch', { flightCode: flightCode, flightSeat: flightSeat })
     })
   }
-
-  // $scope.notify = function() {
-    
-  // }
 
   $scope.resetSockets()
 
