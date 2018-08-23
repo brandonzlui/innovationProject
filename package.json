@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "cd public/ && yarn build && cd ../ && node app.js",
-    "devstart": "cd public/ && yarn build && cd ../ && nodemon app.js",
+    "start": "cd public/ && npm run-script build && cd ../ && node app.js",
+    "devstart": "cd public/ && npm run-script build && cd ../ && nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
