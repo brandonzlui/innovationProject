@@ -1,9 +1,14 @@
-<h1 class="page-title">Seat Map</h1>
-
-<section id="seat-map" name="seat-map">
+<!-- Banner -->
+<div class="jumbotron jumbotron-fluid parallax" style="padding:0">
+  <div class="container con-title">
+    <h1 class ="page-title">Seat map</h1> 
+    <h1 class="page-title" id="flightCode"></h1>
+  </div>
+</div>
+<div style="height:375px"></div>
+<section id="seat-map" name="seat-map" style="background-color:white;">
   <div class="plane">
     <div class="cockpit">
-      <h1 id="flightCode"></h1>
       <h4 id="mySeat"></h4>
       
     </div>
@@ -13,7 +18,7 @@
   </div>
 </section>
 
-<div class="row">
+<div class="row" style="background-color:white;padding-top:6rem;padding-bottom:6rem;">
   <div class="col-6 col-sm-6 col-md-6">
     <div class="wrapper">
       <button type="button" class="btn request" data-toggle="modal" data-target="#modal-aisle" id="aisle-button">
@@ -73,6 +78,26 @@
     </div>
   </div>
 </div>
+
+<!-- Swapped Window Seat Modal -->
+<div class="modal fade" id="modal-window-confirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Accepted Seat Swap</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <hr align="center" width="95%">
+        <div class="modal-body" id="modal-body-window-confirm">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 <!-- confirm modal -->
