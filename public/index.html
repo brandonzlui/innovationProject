@@ -89,9 +89,9 @@
 </div>
 
 
-  <div class="container">
+
     <ui-view></ui-view>
-  </div>
+
 
   <!-- Logo footer -->
   <div class="container cathay-logo-footer">
@@ -139,7 +139,7 @@
   <script src="./lib/js/socket.io.js"></script>
   <script>
     const socket = io();
-    $("#index-loading").animate({opacity:0}, 1500, function(){
+    $("#index-loading").animate({opacity:0}, 2000, function(){
     $("#index-loading").hide();
     });
   </script>
