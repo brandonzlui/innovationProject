@@ -35,6 +35,14 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
         $scope.FlightData.resetToNewSeat(newSeat);
         $scope.resetSockets();
       });
+
+      socket.on(flightCode + '/' + flightSeat + '-cancelled', function (request) {
+        $scope.FlightData.receivedCancel(request);
+        $scope.FlightData.get().then(function (data) {
+          $scope.requests = data.incoming;
+          updateButtonListeners();
+        });
+      });
     });
   };
 

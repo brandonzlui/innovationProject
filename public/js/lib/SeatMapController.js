@@ -213,6 +213,9 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
                 newSeat: _seat2
               });
 
+              $('#modal-swapped').modal('show');
+              $('#modal-body-swapped').prepend('<span> ' + _seat2 + ' </span>');
+
               $scope.FlightData.resetToNewSeat(_seat2);
 
               // Change channel
@@ -220,8 +223,6 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
                 flightCode: flightCode,
                 flightSeat: _seat2
               });
-
-              $('#modal-swapped').modal('show');
 
               return;
             }

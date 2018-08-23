@@ -164,6 +164,12 @@ app.factory('FlightData', function ($q) {
       data.incoming = data.incoming.filter(function (req) {
         return req.fromSeat != fromSeat;
       });
+    },
+
+    receivedCancel: function receivedCancel(fromSeat) {
+      data.incoming = data.incoming.filter(function (req) {
+        return req.fromSeat != fromSeat;
+      });
     }
   };
 });
