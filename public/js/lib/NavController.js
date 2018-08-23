@@ -91,6 +91,14 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
           });
         }, TIMEOUT);
       });
+
+      socket.on(flightCode + '/' + flightSeat + '-cancelled', function (request) {
+        setTimeout(function () {
+          $scope.FlightData.get().then(function (data) {
+            $scope.sections[1].count = data.incoming.length;
+          });
+        }, TIMEOUT);
+      });
     });
   };
 
