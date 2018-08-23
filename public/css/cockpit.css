@@ -437,3 +437,8 @@ ol {
     margin:9rem auto;
   }
 }
+@media screen and (max-width:990){
+  .page-title{
+    margin: 5rem;
+  }
+}
