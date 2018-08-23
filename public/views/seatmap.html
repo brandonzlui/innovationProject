@@ -7,6 +7,9 @@
 </div>
 <div style="height:275px"></div>
 <section id="seat-map" name="seat-map" style="background-color:white;">
+  <div class="seat-map-legend" align="center">
+        <img class="legend" src="./assets/images/innovation_legend.png" alt="Seat map legend">
+</div>
   <div class="plane">
     <div class="cockpit">
       <h4 id="mySeat"></h4>
@@ -18,15 +21,15 @@
   </div>
 </section>
 
-<div class="row" style="background-color:white;padding-top:6rem;padding-bottom:6rem;">
-  <div class="col-6 col-sm-6 col-md-6">
+<div class="row" style="background-color:white;padding-top:3rem;padding-bottom:3rem;">
+  <div class="col-4 col-sm-4 col-md-4">
     <div class="wrapper">
       <button type="button" class="btn request" data-toggle="modal" data-target="#modal-aisle" id="aisle-button">
         Request Aisle Seat
       </button>
    </div>
   </div>
-  <div class="col-6 col-sm-6 col-md-6">
+  <div class="col-4 col-sm-4 col-md-4">
     <div class="wrapper">
       <button type="button" class="btn request" data-toggle="modal" data-target="#modal-window" id="window-button">
         Request Window Seat
@@ -142,3 +145,23 @@
     </div>
   </div>
 </div>
+
+  <!-- Swapped seats modal -->
+  <div class="modal fade" id="modal-swapped" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Seat Swapped</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <hr align="center" width="95%">
+        <div class="modal-body" id="modal-body-swapped"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin:0 auto;">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

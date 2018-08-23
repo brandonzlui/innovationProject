@@ -65,7 +65,8 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
         oldSeat: ownSeat,
         newSeat: seatId
       });
-
+      $('#modal-swapped').modal('show');
+      $('#modal-body-swapped').prepend('<span> ' + seatId + ' </span>');
       $scope.FlightData.resetToNewSeat(seatId);
     });
 
@@ -220,6 +221,8 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
                 flightSeat: _seat2
               });
 
+              $('#modal-swapped').modal('show');
+
               return;
             }
           }
@@ -299,7 +302,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
           });
 
           $scope.FlightData.resetToNewSeat(seat);
-          // TODO Inssert you have changed seat modal (aacepted window swap modal)
+          // TODO Inssert you have changed seat modal 
 
           return;
         }
