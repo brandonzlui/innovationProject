@@ -224,7 +224,7 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
 
             $('#modal-swapped').modal('show')
             $('#modal-body-swapped').prepend(
-              `<span> ${seatId} </span>`
+              `<span> ${seat} </span>`
             )
             
             return
