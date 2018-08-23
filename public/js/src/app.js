@@ -69,13 +69,14 @@ app.factory('FlightData', ($q) => {
     },
 
     resetToNewSeat: function(newSeat) {
+      localStorage.setItem('flightSeat', newSeat)
       data.flightSeat = newSeat
       data.outgoing = []
       data.incoming = []
     },
 
     setAvailable: function(available) {
-      data.plane.available = available
+      data.plane.available = available.sort((x, y) => x.substring(0, x.length - 1) - y.substring(0, y.length - 1))
     },
 
     findIncomingRequest: function(fromSeat) {

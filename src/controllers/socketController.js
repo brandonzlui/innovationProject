@@ -28,6 +28,8 @@ module.exports = function(io) {
       socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
       socket.join(`${flightCode}/${flightSeat}-reset`)
       socket.join(`${flightCode}/${flightSeat}-cancelled`)
+
+      console.log(Object.keys(socket.rooms))
     })
 
     socket.on('fetch', data => {
@@ -142,6 +144,7 @@ module.exports = function(io) {
       cxData.releaseSeat(flightCode, oldSeat)
       const [_, seatMap] = cxData.getSeatMap(flightCode)
 
+      console.log(`Sending reset to ${oldSeat}`)
       io.emit(`${flightCode}/${oldSeat}-reset`, newSeat)
       io.emit(flightCode, seatMap.available)
 
@@ -162,34 +165,48 @@ module.exports = function(io) {
   })
 }
 
-function unsubscribe(socket, flightCode, flightSeat, seatMap) {
-  socket.leave(`${flightCode}/${flightSeat}-init`)
-  socket.leave(`${flightCode}/${flightSeat}-pending`)
-  socket.leave(`${flightCode}/${flightSeat}-accepted`)
-  socket.leave(`${flightCode}/${flightSeat}-declined`)
-  socket.leave(`${flightCode}/${flightSeat}-reset`)
-  socket.leave(`${flightCode}/${flightSeat}-cancelled`)
+function unsubscribePromise(socket, flightCode, flightSeat, seatMap) {
+  return new Promise((resolve, reject) => {
+    socket.leave(`${flightCode}/${flightSeat}-init`, err => {
+      if (err) return reject(err)
 
-  const col = flightSeat.slice(-1)
-  if (seatMap.aisle.includes(col)) socket.leave(`${flightCode}/aisle`)
-  if (seatMap.window.includes(col)) socket.leave(`${flightCode}/window`)
+      socket.leave(`${flightCode}/${flightSeat}-pending`, err => {
+        if (err) return reject(err)
 
-  console.log(`${socket.id} left channels for ${flightSeat}`)
+        socket.leave(`${flightCode}/${flightSeat}-accepted`, err => {
+          if (err) return reject(err)
+
+          socket.leave(`${flightCode}/${flightSeat}-declined`, err => {
+            if (err) return reject(err)
+
+            socket.leave(`${flightCode}/${flightSeat}-reset`, err => {
+              if (err) return reject(err)
+
+              socket.leave(`${flightCode}/${flightSeat}-cancelled`, err => {
+                if (err) return reject(err)
+
+                socket.leave(`${flightCode}/${flightSeat}-request`, err => {
+                  if (err) return reject(err)
+
+                  const col = flightSeat.slice(-1)
+                  if (seatMap.aisle.includes(col)) socket.leave(`${flightCode}/aisle`)
+                  if (seatMap.window.includes(col)) socket.leave(`${flightCode}/window`)
+                  resolve(true)
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+  })
 }
 
-/*
-  socket.join(flightCode)    // use for new seat map purposes
-  socket.join(`${flightCode}/${flightSeat}-init`)                         // use for REPLACE postings
-  console.log(`${socket.id} joined init for ${flightSeat}`)
-
-  socket.join(`${flightCode}/${flightSeat}-request`)                      // use for NEW postings
-  const [_, seatMap] = cxData.getSeatMap(flightCode)
-  const col = flightSeat.slice(-1)
-  if (seatMap.aisle.includes(col)) socket.join(`${flightCode}/aisle`)     // use for NEW postings
-  if (seatMap.window.includes(col)) socket.join(`${flightCode}/window`)   // use for NEW postings
-
-  socket.join(`${flightCode}/${flightSeat}-pending`)                      // use for NEW pending
-  socket.join(`${flightCode}/${flightSeat}-accepted`)                     // use for NEW accepted
-  socket.join(`${flightCode}/${flightSeat}-declined`)                     // use for NEW declined
-  socket.join(`${flightCode}/${flightSeat}-reset`)
- */
+function unsubscribe(socket, flightCode, flightSeat, seatMap) {
+  console.log(socket.id + ' before')
+  console.log(Object.keys(socket.rooms))
+  unsubscribePromise(socket, flightCode, flightSeat, seatMap).then(_ => {
+    console.log(socket.id + ' after')
+    console.log(Object.keys(socket.rooms))
+  }).catch(err => console.error(err)) 
+}

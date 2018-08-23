@@ -116,13 +116,16 @@ app.factory('FlightData', function ($q) {
     },
 
     resetToNewSeat: function resetToNewSeat(newSeat) {
+      localStorage.setItem('flightSeat', newSeat);
       data.flightSeat = newSeat;
       data.outgoing = [];
       data.incoming = [];
     },
 
     setAvailable: function setAvailable(available) {
-      data.plane.available = available;
+      data.plane.available = available.sort(function (x, y) {
+        return x.substring(0, x.length - 1) - y.substring(0, y.length - 1);
+      });
     },
 
     findIncomingRequest: function findIncomingRequest(fromSeat) {
