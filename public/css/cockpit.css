@@ -26,6 +26,14 @@ html {
   margin-bottom:50px;
 }
 
+.parallax{
+  position:fixed;
+  width:100VW;
+  z-index:-1;
+  top:0;
+  height:375px;
+}
+
 .page-title {
   margin-top:20px;
   text-align:center;
@@ -36,7 +44,7 @@ html {
 }
 
 .plane {
-  margin: 20px auto;
+  margin: 20px auto 0;
   max-width: 400px;
 }
 
@@ -55,7 +63,6 @@ html {
 }
 
 .cockpit {
-  height: 250px;
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -424,4 +431,9 @@ ol {
     border-radius: 5px;
     background-color: #006564;
     color: white;
+}
+@media screen and (min-width:991px){
+  .con-title{
+    margin:9rem auto;
+  }
 }
