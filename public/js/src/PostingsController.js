@@ -7,12 +7,14 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
   })
 
   $scope.resetSockets = function() {
+    let active = true
     $scope.FlightData.get().then(flightData => {
       const { flightCode, flightSeat, incoming } = flightData
       $scope.requests = incoming
       updateButtonListeners()
   
       socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        if (!active) return
         $scope.FlightData.addIncomingRequest(request)
         $('#newRequestSpan').html(request.fromSeat)
         $('#newRequestModal').modal('show')
@@ -23,15 +25,20 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
       })
   
       socket.on(`${flightCode}/${flightSeat}-pending`, request => {
+        if (!active) return
         $scope.FlightData.addOutgoingRequest(request)
       }) 
   
       socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        if (!active) return
         $scope.FlightData.resetToNewSeat(newSeat)
+
+        active = false
         $scope.resetSockets()
       })
 
       socket.on(`${flightCode}/${flightSeat}-cancelled`, request => {
+        if (!active) return
         $scope.FlightData.receivedCancel(request)
         $scope.FlightData.get().then(data => {
           $scope.requests = data.incoming

@@ -9,6 +9,7 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
   });
 
   $scope.resetSockets = function () {
+    var active = true;
     $scope.FlightData.get().then(function (flightData) {
       var flightCode = flightData.flightCode,
           flightSeat = flightData.flightSeat,
@@ -18,6 +19,7 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
       updateButtonListeners();
 
       socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
+        if (!active) return;
         $scope.FlightData.addIncomingRequest(request);
         $('#newRequestSpan').html(request.fromSeat);
         $('#newRequestModal').modal('show');
@@ -28,15 +30,20 @@ app.controller('PostingsController', ['$scope', '$http', '$state', '$rootScope',
       });
 
       socket.on(flightCode + '/' + flightSeat + '-pending', function (request) {
+        if (!active) return;
         $scope.FlightData.addOutgoingRequest(request);
       });
 
       socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
+        if (!active) return;
         $scope.FlightData.resetToNewSeat(newSeat);
+
+        active = false;
         $scope.resetSockets();
       });
 
       socket.on(flightCode + '/' + flightSeat + '-cancelled', function (request) {
+        if (!active) return;
         $scope.FlightData.receivedCancel(request);
         $scope.FlightData.get().then(function (data) {
           $scope.requests = data.incoming;

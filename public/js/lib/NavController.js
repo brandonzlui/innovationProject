@@ -29,6 +29,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
   $scope.FlightData = FlightData;
 
   $scope.resetSockets = function () {
+    var active = true;
     $scope.FlightData.get().then(function (data) {
       var flightSeat = data.flightSeat,
           flightCode = data.flightCode,
@@ -37,6 +38,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       $scope.sections[2].count = outgoing.length;
 
       socket.on(flightCode + '/' + flightSeat + '-pending', function () {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             var outgoing = data.outgoing;
@@ -49,6 +51,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       });
 
       socket.on(flightCode + '/' + flightSeat + '-request', function (request) {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             var incoming = data.incoming;
@@ -59,6 +62,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       });
 
       socket.on(flightCode + '/' + flightSeat + '-init', function (postings) {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             var incoming = data.incoming;
@@ -69,6 +73,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       });
 
       socket.on(flightCode + '/' + flightSeat + '-reset', function (newSeat) {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             var incoming = data.incoming,
@@ -81,6 +86,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       });
 
       socket.on(flightCode + '/' + flightSeat + '-accepted', function (seat) {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             var incoming = data.incoming,
@@ -93,6 +99,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       });
 
       socket.on(flightCode + '/' + flightSeat + '-cancelled', function (request) {
+        if (!active) return;
         setTimeout(function () {
           $scope.FlightData.get().then(function (data) {
             $scope.sections[1].count = data.incoming.length;

@@ -31,11 +31,13 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
   $scope.FlightData = FlightData
 
   $scope.resetSockets = function() {
+    let active = true
     $scope.FlightData.get().then(data => {
       const { flightSeat, flightCode, outgoing } = data
       $scope.sections[2].count = outgoing.length
   
       socket.on(`${flightCode}/${flightSeat}-pending`, () => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             const { outgoing } = data
@@ -45,6 +47,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       })
   
       socket.on(`${flightCode}/${flightSeat}-request`, request => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             const { incoming } = data
@@ -54,6 +57,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       })
   
       socket.on(`${flightCode}/${flightSeat}-init`, postings => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             const { incoming } = data
@@ -63,6 +67,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       })
   
       socket.on(`${flightCode}/${flightSeat}-reset`, newSeat => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             const { incoming, outgoing } = data
@@ -73,6 +78,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       })
 
       socket.on(`${flightCode}/${flightSeat}-accepted`, seat => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             const { incoming, outgoing } = data
@@ -83,6 +89,7 @@ app.controller('NavController', ['$scope', '$http', '$state', '$rootScope', 'Fli
       })
 
       socket.on(`${flightCode}/${flightSeat}-cancelled`, request => {
+        if (!active) return
         setTimeout(() => {
           $scope.FlightData.get().then(data => {
             $scope.sections[1].count = data.incoming.length

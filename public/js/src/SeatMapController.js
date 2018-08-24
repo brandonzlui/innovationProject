@@ -74,7 +74,10 @@ app.controller('SeatMapController', ['$scope', '$http', '$state', '$rootScope', 
       $('#modal-body-swapped').prepend(
         `<span id="newSeat"> You have swapped to ${seatId} </span>`
       )
+
       $scope.FlightData.resetToNewSeat(seatId)
+      active = false
+      $scope.resetSockets()
     })
 
     $(".modal").on("hidden.bs.modal", function() {
